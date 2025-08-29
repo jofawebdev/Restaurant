@@ -1,0 +1,268 @@
+/* About Page Styles
+-------------------------------------------------- */
+
+/* Mission and Vision Boxes */
+.mission-box, .vision-box {
+    background: linear-gradient(145deg, #2a2e38, #222831);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    height: 100%;
+    border-left: 4px solid #ffbe33;
+}
+
+.vision-box {
+    border-left-color: #ffbe33;
+}
+
+.mission-box:hover, .vision-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.mission-box h3, .vision-box h3 {
+    color: #ffbe33;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+/* Statistics Section */
+.stats_section {
+    margin: 60px 0;
+}
+
+.stat-box {
+    padding: 20px 10px;
+    margin: 10px 0;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ffbe33;
+    margin-bottom: 5px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.stat-box p {
+    color: #ffffff;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Team Section */
+.team_section {
+    margin: 60px 0;
+}
+
+.team-box {
+    background: #2a2e38;
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 15px 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.team-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.team-box .img-box {
+    position: relative;
+    overflow: hidden;
+    height: 250px;
+}
+
+.team-box .img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.5s ease;
+}
+
+.team-box:hover .img-box img {
+    transform: scale(1.1);
+}
+
+.team-box .social-box {
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    right: 0;
+    background: rgba(255, 190, 51, 0.9);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.team-box:hover .social-box {
+    bottom: 0;
+}
+
+.team-box .social-box a {
+    color: #222831;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px;
+    background: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.team-box .social-box a:hover {
+    background: #222831;
+    color: #ffffff;
+}
+
+.team-box h5 {
+    color: #ffbe33;
+    margin: 15px 0 5px;
+    font-weight: 600;
+}
+
+.team-box p {
+    color: #cccccc;
+    margin-bottom: 15px;
+}
+
+/* Testimonials Section */
+.testimonials_section {
+    margin: 60px 0;
+}
+
+.testimonial-box {
+    background: #2a2e38;
+    padding: 25px;
+    border-radius: 10px;
+    margin: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    height: calc(100% - 30px);
+}
+
+.testimonial-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.testimonial-box .rating {
+    color: #ffbe33;
+    margin-bottom: 15px;
+}
+
+.testimonial-box p {
+    font-style: italic;
+    color: #ffffff;
+    margin-bottom: 20px;
+    position: relative;
+    padding: 0 20px;
+}
+
+.testimonial-box p:before,
+.testimonial-box p:after {
+    content: "\""; /* Fixed: Properly escaped quote character */
+    font-size: 3rem;
+    color: #ffbe33;
+    position: absolute;
+    line-height: 1;
+}
+
+.testimonial-box p:before {
+    top: -15px;
+    left: -10px;
+}
+
+.testimonial-box p:after {
+    content: "\""; /* Fixed: Properly escaped quote character */
+    bottom: -30px;
+    right: -10px;
+}
+
+.testimonial-box .client-info {
+    border-top: 1px solid #444;
+    padding-top: 15px;
+}
+
+.testimonial-box .client-info h6 {
+    color: #ffbe33;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.testimonial-box .client-info span {
+    color: #cccccc;
+    font-size: 0.9rem;
+}
+
+/* Owl Carousel Navigation */
+.testimonial-carousel .owl-nav {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.testimonial-carousel .owl-nav button {
+    background: #ffbe33 !important;
+    color: #222831 !important;
+    width: 40px;
+    height: 40px;
+    border-radius: 50% !important;
+    margin: 0 10px;
+    font-size: 20px !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.testimonial-carousel .owl-nav button:hover {
+    background: #e69c00 !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .mission-box, .vision-box {
+        margin-bottom: 20px;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .team-box {
+        margin-bottom: 30px;
+    }
+    
+    .testimonial-box {
+        margin: 10px 0;
+        height: auto; /* Added for better mobile responsiveness */
+    }
+}
+
+@media (max-width: 576px) {
+    .heading_container h2 {
+        font-size: 2rem;
+    }
+    
+    .stat-box {
+        margin-bottom: 20px;
+    }
+    
+    .testimonial-box p:before,
+    .testimonial-box p:after {
+        font-size: 2rem; /* Smaller quotes on mobile */
+    }
+    
+    .testimonial-box p:before {
+        left: -5px;
+    }
+    
+    .testimonial-box p:after {
+        right: -5px;
+    }
+}

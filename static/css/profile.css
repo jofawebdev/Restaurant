@@ -1,0 +1,162 @@
+/* Profile Page Specific Styles */
+
+/* Profile image styling */
+.profile-image {
+    object-fit: cover;
+    border: 3px solid #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom file input container */
+.custom-file-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+    .custom-file-container {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+}
+
+/* Custom file input group */
+.custom-file-input-group {
+    position: relative;
+    flex: 1;
+    min-width: 0; /* Prevents flex item from overflowing */
+}
+
+/* Hide default file input */
+.custom-file-input-group input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+/* Custom file input label */
+.custom-file-label {
+    display: flex;
+    width: 100%;
+    padding: 0.375rem 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    cursor: pointer;
+    min-height: calc(1.5em + 0.75rem + 2px);
+    align-items: stretch;
+    overflow: hidden;
+}
+
+.custom-file-label:hover {
+    background-color: #f8f9fa;
+}
+
+.file-text {
+    flex: 1;
+    padding: 0.375rem 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-right: 1px solid #ced4da;
+}
+
+.browse-btn {
+    display: flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    color: #495057;
+    background-color: #e9ecef;
+    font-weight: 500;
+}
+
+/* Update button styling */
+.update-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-width: 120px;
+}
+
+@media (max-width: 767.98px) {
+    .update-btn {
+        width: 100%;
+    }
+}
+
+/* Form validation styling */
+.invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #dc3545;
+}
+
+/* Card and container styling */
+.card {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.account-heading {
+    font-size: 1.75rem;
+    font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 575.98px) {
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    .custom-file-label {
+        flex-direction: column;
+        align-items: flex-start;
+        min-height: auto;
+    }
+    
+    .file-text {
+        border-right: none;
+        border-bottom: 1px solid #ced4da;
+        width: 100%;
+    }
+    
+    .browse-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Form group spacing */
+.form-group.row {
+    margin-bottom: 1.5rem;
+}
+
+/* Crispy forms adjustments */
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Button hover effects */
+.btn-outline-info:hover {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}

@@ -1,0 +1,113 @@
+{% extends "Base_App/base.html" %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block class %}class="sub_page"{% endblock class %}
+
+{% block profile_status %}active{% endblock profile_status %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock extra_css %}
+
+{% block main %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <!-- Profile Header -->
+                        <div class="d-flex flex-column flex-md-row align-items-center mb-4">
+                            <img class="rounded-circle me-md-4 mb-3 mb-md-0 profile-image" src="{{ user.profile.image.url }}" alt="{{ user.username }} profile picture" width="100" height="100">
+
+                            <div class="text-center text-md-start">
+                                <h2 class="account-heading mb-1">{{ user.username }}</h2>
+                                <p class="text-secondary text-break mb-0">{{ user.email }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Profile Form -->
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-4 text-center">
+                                    Profile Info
+                                </legend>
+
+                                <!-- User Form Fields -->
+                                <div class="row g-3 mb-3">
+                                    <div class="col-12">
+                                        {{ u_form.username|as_crispy_field }}
+                                    </div>
+
+                                    <div class="col-12">
+                                        {{ u_form.email|as_crispy_field }}
+                                    </div>
+                                </div>
+                                
+                                <!-- Profile Image Field -->
+                                <div class="form-group row mb-4">
+                                    <label class="col-md-3 col-form-label">Profile Image</label>
+                                    <div class="col-md-9">
+                                        <div class="custom-file-container">
+                                            <div class="custom-file-input-group">
+                                                <!-- Render file input directly with our custom widget -->
+                                                {{ p_form.image }}
+                                                <label class="custom-file-label" for="profile-image-input">
+                                                    <span class="file-text">Choose file</span>
+                                                    <span class="browse-btn">Browse</span>
+                                                </label>
+                                            </div>
+
+                                            <button class="btn btn-outline-info update-btn" type="submit">Update</button>
+                                        </div>
+
+                                        <!-- Helper text -->
+                                        <div class="form-text small mt-2">Recommended size: 300x300 pixels</div>
+
+                                        <!-- Error Messages -->
+                                        {% if p_form.image.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {% for error in p_form.image.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main %}
+
+{% block extra_js %}
+    <script>
+        // JavaScript to update the custom file input label with the selected file name
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('profile-image-input');
+            const fileText = document.querySelector('.file-text');
+
+            if (fileInput && fileText) {
+                // Set initial text if a file is already selected
+                if (fileInput.files.length > 0) {
+                    fileText.textContent = fileInput.files[0].name;
+                }
+
+                // Update text when a new file is selected
+                fileInput.addEventListener('change', function() {
+                    if (this.files && this.files.length > 0) {
+                        fileText.textContent = this.files[0].name;
+                    } else {
+                        fileText.textContent = 'Choose file';
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock extra_js %}

@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 from Base_App.views import *
 
 urlpatterns = [
@@ -27,7 +28,19 @@ urlpatterns = [
     path('menu', MenuView, name="Menu"),
     path('about', AboutView, name="About"),
     path('feedback', FeedbackView, name="Feedback_Form"),
+
+    # View for User Profile
+    path('profile/', profile, name='profile'),
+
+    # User Authentication URLs (Login, Register, Logout, Password Reset)
+    path('register/', RegisterView.as_view(), name='register'), # User Registration
+    
+    path('login/', LoginView.as_view(), name='login'), # User Login
+
+    path('logout/', logout_view, name='logout'), # User Logout
 ]
+
+# Serve media & static files during development 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

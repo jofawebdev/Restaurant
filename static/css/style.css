@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap");
+
+/* Base Styles */
 body {
   font-family: "Open Sans", sans-serif;
   color: #0c0c0c;
@@ -6,6 +8,7 @@ body {
   overflow-x: hidden;
 }
 
+/* Layout Padding Utilities */
 .layout_padding {
   padding: 90px 0;
 }
@@ -30,6 +33,7 @@ body {
   padding-bottom: 90px;
 }
 
+/* Typography */
 h1,
 h2 {
   font-family: 'Dancing Script', cursive;
@@ -71,6 +75,7 @@ h2 {
   text-align: center;
 }
 
+/* Links and Buttons */
 a,
 a:hover,
 a:focus {
@@ -89,7 +94,7 @@ a:focus {
           box-shadow: none;
 }
 
-/*header section*/
+/* Header Section */
 .hero_area {
   position: relative;
   min-height: 100vh;
@@ -175,7 +180,8 @@ a:focus {
   transition: all 0.3s;
 }
 
-.custom_nav-container .navbar-nav .nav-item:hover .nav-link, .custom_nav-container .navbar-nav .nav-item.active .nav-link {
+.custom_nav-container .navbar-nav .nav-item:hover .nav-link, 
+.custom_nav-container .navbar-nav .nav-item.active .nav-link {
   color: #ffbe33;
 }
 
@@ -192,6 +198,7 @@ a:focus {
   color: #ffbe33;
 }
 
+/* User Options - Updated for Authentication Elements */
 .user_option {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -202,15 +209,18 @@ a:focus {
 }
 
 .user_option a {
-  margin: 0 10px;
+  margin: 0 5px;
 }
 
 .user_option .user_link {
   color: #ffffff;
+  display: flex;
+  align-items: center;
 }
 
 .user_option .user_link:hover {
   color: #ffbe33;
+  text-decoration: none;
 }
 
 .user_option .cart_link {
@@ -236,21 +246,103 @@ a:focus {
   fill: #ffbe33;
 }
 
+/* Authentication Buttons */
+.user_option .btn {
+  display: inline-block;
+  padding: 6px 15px;
+  border-radius: 45px;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.user_option .btn-outline-light {
+  background-color: transparent;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+}
+
+.user_option .btn-outline-light:hover {
+  background-color: #ffffff;
+  color: #222831;
+}
+
+.user_option .btn-primary {
+  background-color: #ffbe33;
+  color: #ffffff;
+}
+
+.user_option .btn-primary:hover {
+  background-color: #e69c00;
+  color: #ffffff;
+}
+
 .user_option .order_online {
   display: inline-block;
-  padding: 8px 30px;
+  padding: 8px 20px;
   background-color: #ffbe33;
   color: #ffffff;
   border-radius: 45px;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
   border: none;
+  font-size: 14px;
+  margin-left: 10px;
 }
 
 .user_option .order_online:hover {
   background-color: #e69c00;
+  color: #ffffff;
+  text-decoration: none;
 }
 
+/* User Dropdown Styles */
+.user_option .dropdown-menu {
+  background-color: #222831;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.user_option .dropdown-item {
+  color: #ffffff;
+  padding: 10px 15px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.user_option .dropdown-item:hover {
+  background-color: #ffbe33;
+  color: #222831;
+}
+
+.user_option .dropdown-item i {
+  width: 20px;
+  margin-right: 8px;
+}
+
+.user_option .dropdown-divider {
+  border-color: #444;
+}
+
+.user_option .btn-link {
+  background: none;
+  border: none;
+  color: inherit;
+  text-align: left;
+  width: 100%;
+  padding: 0;
+}
+
+.user_option .btn-link:hover {
+  text-decoration: none;
+}
+
+/* Navbar Toggler */
 .custom_nav-container .navbar-toggler {
   outline: none;
 }
@@ -276,7 +368,8 @@ a:focus {
   transition: all 0.3s;
 }
 
-.custom_nav-container .navbar-toggler span::before, .custom_nav-container .navbar-toggler span::after {
+.custom_nav-container .navbar-toggler span::before, 
+.custom_nav-container .navbar-toggler span::after {
   content: "";
   position: absolute;
   left: 0;
@@ -303,14 +396,44 @@ a:focus {
           transform: rotate(45deg);
 }
 
-.custom_nav-container .navbar-toggler[aria-expanded="true"] span::before, .custom_nav-container .navbar-toggler[aria-expanded="true"] span::after {
+.custom_nav-container .navbar-toggler[aria-expanded="true"] span::before, 
+.custom_nav-container .navbar-toggler[aria-expanded="true"] span::after {
   -webkit-transform: rotate(90deg);
           transform: rotate(90deg);
   top: 0;
 }
 
-/*end header section*/
-/* slider section */
+/* Responsive Adjustments for Authentication Elements */
+@media (max-width: 992px) {
+  .custom_nav-container .navbar-nav {
+    padding-left: 0;
+    margin-top: 15px;
+  }
+  
+  .user_option {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 15px;
+  }
+  
+  .user_option a,
+  .user_option .btn {
+    margin: 5px 0;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .user_option .dropdown {
+    width: 100%;
+  }
+  
+  .user_option .user_link {
+    justify-content: center;
+    padding: 8px 0;
+  }
+}
+
+/* Slider Section */
 .slider_section {
   -webkit-box-flex: 1;
       -ms-flex: 1;
@@ -396,6 +519,7 @@ a:focus {
   background-color: #ffbe33;
 }
 
+/* Offer Section */
 .offer_section {
   position: relative;
   padding-top: 45px;
@@ -477,6 +601,7 @@ a:focus {
           transform: scale(1.1);
 }
 
+/* Food Section */
 .food_section .filters_menu {
   padding: 0;
   display: -webkit-box;
@@ -614,6 +739,7 @@ a:focus {
   background-color: #e69c00;
 }
 
+/* About Section */
 .about_section {
   background: #222831;
   color: #ffffff;
@@ -662,6 +788,7 @@ a:focus {
   background-color: #e69c00;
 }
 
+/* Book Section */
 .book_section {
   position: relative;
 }
@@ -736,7 +863,7 @@ a:focus {
   width: 100%;
 }
 
-/* client section start */
+/* Client Section */
 .client_section .heading_container {
   margin-bottom: 30px;
 }
@@ -829,7 +956,7 @@ a:focus {
   border-radius: 100%;
 }
 
-/* client section end */
+/* Contact Section */
 .contact_section .heading_container {
   margin-bottom: 45px;
 }
@@ -898,7 +1025,7 @@ a:focus {
   background-color: #e69c00;
 }
 
-/* footer section*/
+/* Footer Section */
 .footer_section {
   background-color: #222831;
   color: #ffffff;
@@ -1004,4 +1131,69 @@ a:focus {
 .footer_section .footer-info p a {
   color: inherit;
 }
-/*# sourceMappingURL=style.css.map */
+
+/* Additional Styles for Authentication Elements */
+.user_option .dropdown-toggle::after {
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+.user_option .d-md-inline {
+  display: inline !important;
+}
+
+@media (max-width: 767px) {
+  .user_option .d-md-inline {
+    display: none !important;
+  }
+  
+  .user_option .dropdown-toggle {
+    justify-content: center;
+  }
+}
+
+/* Form Styles for Authentication Pages */
+.auth-form {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.auth-form h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #222831;
+}
+
+.auth-form .form-group {
+  margin-bottom: 20px;
+}
+
+.auth-form .btn-primary {
+  background-color: #ffbe33;
+  border-color: #ffbe33;
+  width: 100%;
+  padding: 12px;
+}
+
+.auth-form .btn-primary:hover {
+  background-color: #e69c00;
+  border-color: #e69c00;
+}
+
+.auth-form .auth-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.auth-form .auth-link a {
+  color: #ffbe33;
+}
+
+.auth-form .auth-link a:hover {
+  color: #e69c00;
+  text-decoration: underline;
+}
