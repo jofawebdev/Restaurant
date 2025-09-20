@@ -2,53 +2,53 @@
 
 {% block class %}class="sub_page"{% endblock class %}
 
+{% block cart_status %}active{% endblock cart_status %}
 {% block main %}
-    <div class="container py-5">
-        <h2>Your Cart</h2>
+<div class="container py-5">
+    <h2>Your Cart</h2>
 
-        {% if cart.items.all %}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Price</th>
-                        <th>Subtotal</th>
-                        <th></th>
-                    </tr>
-                </thead>
+    {% if cart.items.all %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cart_item in cart.items.all %}
+                <tr>
+                    <td>{{ cart_item.item.Item_name }}</td>
+                    <td>${{ cart_item.item.Price }}</td>
+                    <td>
+                        <form action="{% url 'update_cart' cart_item.item.id %}" method="post" class="form-inline">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="0" class="form-control form-control-sm" style="width:80px;">
+                            <button type="submit" class="btn btn-sm btn-primary ml-2">Update</button>
+                        </form>
+                    </td>
+                    <td>${{ cart_item.subtotal }}</td>
+                    <td>
+                        <form action="{% url 'update_cart' cart_item.item.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="0">
+                            <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-                <tbody>
-                    {% for cart_item in cart.items.all %}
-                        <tr>
-                            <td>{{ cart_item.item.Item_name }}</td>
-                            <td>${{ cart_item.item.Price }}</td>
-                            <td>
-                                <form action="{% url 'update_cart' cart_item.item.id %}" method="post" class="form-inline">
-                                    {% csrf_token %}
-                                    <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="0" class="form-control form-control-sm" style="width: 80px;">
-                                    <button type="submit" class="btn btn-sm btn-primary ml-2">Update</button>
-                                </form>
-                            </td>
-                            <td>${{ cart_item.subtotal }}</td>
-
-                            <td>
-                                <form action="{% url 'update_cart' cart_item.item.id %}" method="post">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="quantity" value="0">
-                                    <button type="submit" class="btn btn-sm btn-danger">Remove</button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-            <div class="text-right">
-                <h4>Total: ${{ cart.total_price }}</h4>
-                <a href="#" class="btn btn-success">Checkout</a>
-            </div>
-        {% else %}
-            <p>Your cart is empty. <a href="{% url 'Menu' %}">Go to menu</a></p>
-        {% endif %}
-    </div>
+        <div class="text-right">
+            <h4>Total: ${{ cart.total_price }}</h4>
+            <a href="#" class="btn btn-success">Checkout</a>
+        </div>
+    {% else %}
+        <p>Your cart is empty. <a href="{% url 'Menu' %}">Go to menu</a></p>
+    {% endif %}
+</div>
 {% endblock main %}

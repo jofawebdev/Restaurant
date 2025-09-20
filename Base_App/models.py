@@ -41,6 +41,45 @@ class Items(models.Model):
 
     def __str__(self):
         return self.Item_name
+
+
+
+# Cart Models
+class Cart(models.Model):
+    """
+    A Cart belongs to a user (if logged in).
+    For anonymous users, we will use sessions (not persisted here)
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="cart")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Cart for {self.user.username}"
+    
+    def total_price(self):
+        """
+        Calculate total price of all items in the cart
+        """
+        return sum(item.subtotal() for item in self.items.all())
+    
+
+
+class CartItem(models.Model):
+    """
+    Represents a single menu item inside a cart
+    """
+    cart = models.ForeignKey(Cart, related_name="items", on_delete=models.CASCADE)
+    item = models.ForeignKey(Items, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        unique_together = ("cart", "item") # Prevent duplicates
+
+    def __str__(self):
+        return f"{self.quantity} x {self.item.Item_name}"    
+
+    def subtotal(self):
+        return self.quantity * self.item.Price
     
 
 

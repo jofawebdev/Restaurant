@@ -66,6 +66,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # Add custom cart summary processor
+                "Base_App.context_processors.cart_summary",
             ],
         },
     },

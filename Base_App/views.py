@@ -27,7 +27,7 @@ def HomeView(request):
         {
             'items': items,
             'categories': categories,
-            'reviews': reviews,
+            'review': reviews,
         },
     )
 
@@ -46,7 +46,7 @@ def AboutView(request):
 # =========================
 # Menu Page View
 # Supports filtering by category (via ?category=slug)
-# and paginates menu items.
+# and paginates menu items (8 items per page).
 # =========================
 def MenuView(request):
     categories = ItemList.objects.all()
@@ -241,6 +241,9 @@ def logout_view(request):
 # =========================
 @login_required
 def profile(request):
+    """
+    Displays and updates user profile.
+    """
     profile, created = Profile.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
@@ -264,3 +267,79 @@ def profile(request):
             'p_form': p_form,
         },
     )
+
+
+# CART FUNCTIONALITY (Session-based)
+def add_to_cart(request, item_id):
+    """
+    Add an item to the session cart.
+    - If already in cart, increment quantity.
+    - Otherwise, add new item.
+    """
+    item = get_object_or_404(Items, id=item_id)
+
+    cart = request.session.get('cart', {})
+    cart[str(item_id)] = cart.get(str(item_id), 0) + 1
+
+    request.session['cart'] = cart
+    request.session.modified = True
+
+    messages.success(request, f"{item.Item_name} added to your cart.")
+    return redirect('Menu')
+
+def view_cart(request):
+    """
+    Displays all items currently in the user's session cart.
+
+    - Fetches cart from session (dict {item_id: quantity}).
+    - Builds a list of cart items with details, quantity, and subtotal.
+    - Calculates the cart total.
+    """
+    cart = request.session.get('cart', {})  # session cart: {"1": 2, "3": 1}
+    cart_items = []
+    cart_total = 0
+
+    # Loop through cart items stored in session
+    for item_id, quantity in cart.items():
+        try:
+            item = Items.objects.get(id=item_id)  # get product details
+            subtotal = item.Price * quantity
+
+            cart_items.append({
+                'item': item,
+                'quantity': quantity,
+                'subtotal': subtotal,
+            })
+
+            cart_total += subtotal
+        except Items.DoesNotExist:
+            continue  # skip items that no longer exist in DB
+
+    context = {
+        'cart_items': cart_items,
+        'cart_total': cart_total,
+    }
+    return render(request, 'Base_App/view_cart.html', context)
+
+
+def update_cart(request, item_id):
+    """
+    Update quantity or remove item from the cart.
+    - If quantity is set to 0 → item removed.
+    """
+    if request.method == 'POST':
+        new_qty = int(request.POST.get('quantity', 1))
+        cart = request.session.get('cart', {})
+
+        if str(item_id) in cart:
+            if new_qty > 0:
+                cart[str(item_id)] = new_qty
+                messages.success(request, "Cart updated successfully.")
+            else:
+                del cart[str(item_id)]
+                messages.info(request, "Item removed from your cart.")
+
+        request.session['cart'] = cart
+        request.session.modified = True
+
+    return redirect('view_cart')

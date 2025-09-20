@@ -113,6 +113,28 @@
                                         <i class="fa fa-user-plus mr-1" aria-hidden="true"></i>Register
                                     </a>
                                 {% endif %}
+
+                                <!-- Cart with Badge -->
+                                <li class="nav-item">
+                                    <a class="nav-link position-relative text-white" href="{% url 'view_cart' %}">
+                                        <i class="fa fa-shopping-cart"></i> Cart
+                                        {% if cart_item_count > 0 %}
+                                            <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+                                                {{ cart_item_count }}
+                                            </span>
+                                        {% endif %}
+                                    </a>
+                                </li>
+
+                                <li class="nav-item ms-2">
+                                    <span class="nav-link">
+                                        {% if cart_total_price > 0 %}
+                                            <small class="text-white">Total: ${{ cart_total_price }}</small>
+                                        {% else %}
+                                            <small class="text-muted">Cart empty</small>
+                                        {% endif %}
+                                    </span>
+                                </li>
                                 
                             </div>
                         </div>

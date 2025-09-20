@@ -22,12 +22,15 @@ from django.contrib.auth import views as auth_views
 from Base_App.views import *
 
 urlpatterns = [
+    # Admin
     path('admin/', admin.site.urls),
-    path('', HomeView, name="Home"),
-    path('book_table', BookTableView, name="Book_Table"),
-    path('menu/', MenuView, name="Menu"),
-    path('about', AboutView, name="About"),
-    path('feedback', FeedbackView, name="Feedback_Form"),
+
+    # Core Pages
+    path('', HomeView, name="Home"), # Home Page
+    path('book_table', BookTableView, name="Book_Table"), # Table Booking Form
+    path('menu/', MenuView, name="Menu"), # Menu (food items list)
+    path('about', AboutView, name="About"), # About Us Page
+    path('feedback', FeedbackView, name="Feedback_Form"), # Feedback Form
 
     # View for User Profile
     path('profile/', profile, name='profile'),
@@ -38,6 +41,11 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'), # User Login
 
     path('logout/', logout_view, name='logout'), # User Logout
+    
+    # Cart Functionality
+    path('cart/', view_cart, name="view_cart"), # View cart contents
+    path('cart/add/<int:item_id>/', add_to_cart, name="add_to_cart"), # Add item to cart
+    path('cart/update/<int:item_id>/', update_cart, name="update_cart"), # Update item qty / remove
 ]
 
 # Serve media & static files during development 
