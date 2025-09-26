@@ -1197,3 +1197,130 @@ a:focus {
   color: #e69c00;
   text-decoration: underline;
 }
+
+/* Custom styles for discount display */
+.original-price {
+    font-size: 0.9em;
+}
+
+.discounted-price {
+    font-size: 1.1em;
+}
+
+.item-description {
+    min-height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.img-box {
+    overflow: hidden;
+}
+
+.badge {
+    font-size: 0.7rem;
+    padding: 0.35em 0.65em;
+    z-index: 1;
+}
+
+
+/* Offer Section Styling */
+.offer_section {
+    background-color: #f8f9fa;
+    padding: 60px 0;
+}
+
+.section-heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.section-subheading {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+
+.offer-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #ff6b6b;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.offer-description {
+    color: #ffffff;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.valid-until {
+    font-size: 0.9rem;
+    color: #ff5252;
+    margin-bottom: 15px;
+}
+
+.order-btn {
+    display: inline-flex;
+    align-items: center;
+    background: #ff6b6b;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.order-btn:hover {
+    background: #ff5252;
+    color: white;
+    text-decoration: none;
+}
+
+.order-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: white;
+    margin-left: 8px;
+}
+
+.no-offers-message {
+    padding: 40px 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.view-all-offers {
+    color: #ff6b6b;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 2px solid #ff6b6b;
+    padding-bottom: 2px;
+    transition: color 0.3s ease;
+}
+
+.view-all-offers:hover {
+    color: #ff5252;
+    text-decoration: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .img-box {
+        height: 200px;
+    }
+    
+    .section-heading {
+        font-size: 2rem;
+    }
+}

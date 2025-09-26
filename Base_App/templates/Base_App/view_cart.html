@@ -43,7 +43,15 @@
                 </td>
 
                 <!-- Price -->
-                <td>${{ cart_item.item.Price }}</td>
+                <td>
+                  {% if cart_item.has_discount %}
+                    <span class="text-muted" style="text-decoration: line-through;">${{ cart_item.original_price }}</span>
+                    <br>
+                    <span class="text-danger font-weight-bold">${{ cart_item.discounted_price }}</span>
+                  {% else %}
+                    ${{ cart_item.original_price }}
+                  {% endif %}
+                </td>
 
                 <!-- Quantity update form -->
                 <td>
@@ -63,7 +71,15 @@
                 </td>
 
                 <!-- Subtotal -->
-                <td>${{ cart_item.subtotal }}</td>
+                <td>
+                  {% if cart_item.has_discount %}
+                    <span class="text-muted" style="text-decoration: line-through;">${{ cart_item.original_price|floatformat:2 }}</span>
+                    <br>
+                    <span class="text-danger font-weight-bold">${{ cart_item.subtotal|floatformat:2 }}</span>
+                  {% else %}
+                    ${{ cart_item.subtotal|floatformat:2 }}
+                  {% endif %}
+                </td>
 
                 <!-- Remove button -->
                 <td>
@@ -85,7 +101,11 @@
       <div class="cart_summary mt-4 p-3 bg-light rounded shadow-sm">
         <h5 class="fw-bold">Cart Summary</h5>
         <p class="mb-1">Total Items: {{ cart_item_count }}</p>
-        <p class="mb-3">Total Price: <strong>${{ cart_total }}</strong></p>
+        {% if total_discount > 0 %}
+          <p class="mb-1 text-muted" style="text-decoration: line-through;">Original Total: ${{ original_total|floatformat:2 }}</p>
+          <p class="mb-1 text-success">Discount: -${{ total_discount|floatformat:2 }}</p>
+        {% endif %}
+        <p class="mb-3">Total Price: <strong>${{ cart_total|floatformat:2 }}</strong></p>
 
         <div class="d-flex justify-content-between">
           <a href="{% url 'Menu' %}" class="btn btn-outline-secondary">

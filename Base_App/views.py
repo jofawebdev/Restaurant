@@ -6,11 +6,11 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from .forms import RegisterForm, LoginForm, UserUpdateForm, ProfileUpdateForm
-from Base_App.models import BookTable, AboutUs, Feedback, ItemList, Items, Profile
+from Base_App.models import BookTable, AboutUs, Feedback, ItemList, Items, Profile, Offer
 
 
 # =========================
@@ -21,6 +21,14 @@ def HomeView(request):
     categories = ItemList.objects.all()
     reviews = Feedback.objects.all()
 
+    # Get active offers
+    now = timezone.now()
+    active_offers = Offer.objects.filter(
+        start_date__lte=now,
+        end_date__gte=now,
+        is_active=True
+    )
+
     return render(
         request,
         'Base_App/home.html',
@@ -28,6 +36,7 @@ def HomeView(request):
             'items': items,
             'categories': categories,
             'review': reviews,
+            'offers': active_offers,
         },
     )
 
@@ -60,6 +69,19 @@ def MenuView(request):
         current_category = get_object_or_404(ItemList, slug=category_slug)
         items_qs = items_qs.filter(Category=current_category)
 
+    # Get active offers to display discount badges
+    now = timezone.now()
+    active_offers = Offer.objects.filter(
+        start_date__lte=now,
+        end_date__gte=now,
+        is_active=True
+    )
+
+    # Annotate items with their discounted prices
+    for item in items_qs:
+        item.discounted_price = item.get_discounted_price()
+        item.has_discount = item.discounted_price != item.Price
+
     # Pagination: 8 items per page
     paginator = Paginator(items_qs, 8)
     page_number = request.GET.get('page')
@@ -79,6 +101,7 @@ def MenuView(request):
             'items': items,
             'current_category': current_category,
             'paginate': True,  # Template flag to render pagination controls
+            'offers': active_offers,
         },
     )
 
@@ -293,31 +316,47 @@ def view_cart(request):
 
     - Fetches cart from session (dict {item_id: quantity}).
     - Builds a list of cart items with details, quantity, and subtotal.
-    - Calculates the cart total.
+    - Calculates the cart total with discounts applied.
     """
     cart = request.session.get('cart', {})  # session cart: {"1": 2, "3": 1}
     cart_items = []
     cart_total = 0
+    original_total = 0
+    total_discount = 0
 
     # Loop through cart items stored in session
     for item_id, quantity in cart.items():
         try:
             item = Items.objects.get(id=item_id)  # get product details
-            subtotal = item.Price * quantity
+            original_price = item.Price
+            discounted_price = item.get_discounted_price()
+            subtotal = discounted_price * quantity
+            original_subtotal = original_price * quantity
+            item_discount = original_subtotal - subtotal
 
             cart_items.append({
                 'item': item,
                 'quantity': quantity,
                 'subtotal': subtotal,
+                'original_price': original_price,
+                'discounted_price': discounted_price,
+                'has_discount': discounted_price != original_price,
+                'item_discount': item_discount
             })
 
             cart_total += subtotal
+            original_total += original_subtotal
+            total_discount += item_discount
+
         except Items.DoesNotExist:
             continue  # skip items that no longer exist in DB
 
     context = {
         'cart_items': cart_items,
         'cart_total': cart_total,
+        'original_total': original_total,
+        'total_discount': total_discount,
+        'cart_item_count': len(cart_items),
     }
     return render(request, 'Base_App/view_cart.html', context)
 

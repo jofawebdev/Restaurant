@@ -3,6 +3,7 @@ from django.utils.text import slugify
 from django.utils import timezone
 from django.contrib.auth.models import User
 from PIL import Image
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Category list for items (e.g., burger, pasta, sandwich)
 class ItemList(models.Model):
@@ -42,6 +43,67 @@ class Items(models.Model):
     def __str__(self):
         return self.Item_name
 
+    def get_discounted_price(self):
+        """
+        Calculate discounted price if item is on offer
+        Returns original price if no active offer exists
+        """
+        now = timezone.now()
+        # Get active offers for this item
+        active_offers = self.offers.filter(
+            start_date__lte=now,
+            end_date__gte=now,
+            is_active=True
+        )
+
+        if active_offers.exists():
+            # Get the offer with highest discount (assuming multiple offers shouldn't overlap)
+            best_offer = active_offers.order_by('-discount_percent').first()
+            discount_amount = (self.Price * best_offer.discount_percent) / 100
+            return self.Price - discount_amount
+        return self.Price
+    
+
+# Offer Model
+class Offer(models.Model):
+    """
+    Model for storing promotional ofers
+    """
+    title = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    discount_percent = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        validators=[MinValueValidator(0), MaxValueValidator(100)]
+    )
+    items = models.ManyToManyField(Items, related_name='offers', blank=True)
+    categories = models.ManyToManyField(ItemList, related_name='offers', blank=True)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    is_active = models.BooleanField(default=True)
+    image = models.ImageField(upload_to='offers/', blank=True, null=True)
+
+    class Meta:
+        ordering = ['-start_date']
+
+    def __str__(self):
+        return f"{self.title} - {self.discount_percent}% Off"
+
+    def is_currently_active(self):
+        """
+        Check if offer is currently active
+        """
+        now = timezone.now()
+        return self.start_date <= now <= self.end_date and self.is_active
+    
+    def get_discounted_price(self, original_price):
+        """
+        Calculate discounted price for any item
+        """
+        discount_amount = (original_price * self.discount_percent) / 100
+        return original_price - discount_amount
+
+
 
 
 # Cart Models
@@ -58,7 +120,7 @@ class Cart(models.Model):
     
     def total_price(self):
         """
-        Calculate total price of all items in the cart
+        Calculate total price of all items in the cart with discounts applied
         """
         return sum(item.subtotal() for item in self.items.all())
     
@@ -79,7 +141,8 @@ class CartItem(models.Model):
         return f"{self.quantity} x {self.item.Item_name}"    
 
     def subtotal(self):
-        return self.quantity * self.item.Price
+        # Use discounted price if available
+        return self.quantity * self.item.get_discounted_price()
     
 
 

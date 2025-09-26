@@ -15,6 +15,9 @@
             <!-- Page Heading -->
             <div class="heading_container heading_center">
                 <h2>Our Menu</h2>
+                {% if current_category %}
+                    <p class="text-muted">Category: {{ current_category.Category_name }}</p>
+                {% endif %}
             </div>
 
             <!-- Category Filter Menu -->
@@ -44,11 +47,18 @@
                             <div class="box">
                                 <div>
                                     <!-- Item Image -->
-                                    <div class="img-box">
+                                    <div class="img-box position-relative">
                                         {% if item.Image %}
                                             <img src="{{ item.Image.url }}" alt="{{ item.Item_name }}">
                                         {% else %}
                                             <img src="{% static 'images/default_item.png' %}" alt="No image available">
+                                        {% endif %}
+                                        
+                                        <!-- Discount Badge (if applicable) -->
+                                        {% if item.has_discount %}
+                                            <span class="position-absolute top-0 end-0 badge bg-danger m-2">
+                                                Save {{ item.get_discount_percent }}%
+                                            </span>
                                         {% endif %}
                                     </div>
 
@@ -57,12 +67,25 @@
                                         <h5>{{ item.Item_name }}</h5>
 
                                         {% if item.description %}
-                                            <p>{{ item.description }}</p>
+                                            <p class="item-description">{{ item.description|truncatewords:15 }}</p>
                                         {% endif %}
 
                                         <div class="options d-flex justify-content-between align-items-center">
-                                            <!-- Item Price -->
-                                            <h6 class="mb-0">${{ item.Price }}</h6>
+                                            <!-- Item Price with Discount Display -->
+                                            <div class="price-container">
+                                                {% if item.has_discount %}
+                                                    <!-- Show original and discounted price -->
+                                                    <span class="original-price text-muted" style="text-decoration: line-through;">
+                                                        ${{ item.Price }}
+                                                    </span>
+                                                    <span class="discounted-price text-danger font-weight-bold">
+                                                        ${{ item.discounted_price|floatformat:2 }}
+                                                    </span>
+                                                {% else %}
+                                                    <!-- Show regular price -->
+                                                    <span class="price">${{ item.Price }}</span>
+                                                {% endif %}
+                                            </div>
 
                                             <!-- Add-to-cart button (form POST) -->
                                             <form action="{% url 'add_to_cart' item.id %}" method="post" class="d-inline">
@@ -78,8 +101,9 @@
                         </div>
                     {% empty %}
                         <!-- Empty state message -->
-                        <div class="col-12">
-                            <p>No menu items found for this category.</p>
+                        <div class="col-12 text-center py-4">
+                            <p class="text-muted">No menu items found for this category.</p>
+                            <a href="{% url 'Menu' %}" class="btn btn-primary">View All Items</a>
                         </div>
                     {% endfor %}
                 </div>
@@ -93,7 +117,7 @@
                         <!-- Previous Page -->
                         {% if items.has_previous %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ items.previous_page_number }}" aria-label="Previous">
+                                <a class="page-link" href="?page={{ items.previous_page_number }}{% if current_category %}&category={{ current_category.slug }}{% endif %}" aria-label="Previous">
                                     &laquo;
                                 </a>
                             </li>
@@ -112,7 +136,7 @@
                                     </li>
                                 {% else %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                        <a class="page-link" href="?page={{ num }}{% if current_category %}&category={{ current_category.slug }}{% endif %}">{{ num }}</a>
                                     </li>
                                 {% endif %}
                             {% endif %}
@@ -121,7 +145,7 @@
                         <!-- Next Page -->
                         {% if items.has_next %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ items.next_page_number }}" aria-label="Next">
+                                <a class="page-link" href="?page={{ items.next_page_number }}{% if current_category %}&category={{ current_category.slug }}{% endif %}" aria-label="Next">
                                     &raquo;
                                 </a>
                             </li>
@@ -136,7 +160,7 @@
 
             <!-- Extra "View More" Button -->
             <div class="btn-box mt-4 text-center">
-                <a href="#">View More</a>
+                <a href="#" class="btn btn-outline-primary">View More</a>
             </div>
         </div>
     </section>
