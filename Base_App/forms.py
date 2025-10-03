@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, Order
 
 
 class RegisterForm(UserCreationForm):
@@ -74,3 +74,60 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['image']
+
+
+class CheckoutForm(forms.ModelForm):
+    """
+    Form for collecting customer information during checkout
+    """
+    # Add additional fields for validation if needed
+    agree_terms = forms.BooleanField(
+        required=True,
+        error_messages={'required': 'You must agree to the terms and conditions'},
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+    )
+
+    class Meta:
+        model = Order
+        fields = ['customer_name', 'customer_email', 'customer_phone', 'customer_address', 'special_instructions']
+        widgets = {
+            'customer_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Full Name',
+                'required': True
+            }),
+            'customer_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Email Address',
+                'required': True
+            }),
+            'customer_phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Phone Number',
+                'required': True
+            }),
+            'customer_address': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Delivery Address (if applicable)',
+                'rows': 3
+            }),
+            'special_instructions': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Any special instructions for your order...',
+                'rows': 3
+            }),
+        }
+        labels = {
+            'customer_address': 'Delivery Address',
+            'special_instructions': 'Special Instructions'
+        }
+
+    def clean_customer_phone(self):
+        """
+        Validate Phone number format
+        """
+        phone = self.cleaned_data.get('customer_phone')
+        # Basic phone validation - you can enhance this as needed
+        if len(phone) < 10:
+            raise forms.ValidationError("Please enter a valid phone number")
+        return phone

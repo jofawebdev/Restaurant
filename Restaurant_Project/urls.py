@@ -46,6 +46,12 @@ urlpatterns = [
     path('cart/', view_cart, name="view_cart"), # View cart contents
     path('cart/add/<int:item_id>/', add_to_cart, name="add_to_cart"), # Add item to cart
     path('cart/update/<int:item_id>/', update_cart, name="update_cart"), # Update item qty / remove
+
+    # Order and Checkout URLs
+    path('checkout/', checkout_view, name="checkout"),
+    path('order/confirmation/<int:order_id>/', order_confirmation, name="order_confirmation"),
+    path('order/history/', order_history, name="order_history"),
+    path('order/detail/<int:order_id>/', order_detail, name="order_detail"),
 ]
 
 # Serve media & static files during development 

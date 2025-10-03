@@ -2,129 +2,136 @@
 {% load static %}
 
 {% block class %}class="sub_page"{% endblock class %}
+
 {% block main %}
+    <section class="cart_section layout_padding-bottom py-5">
+        <div class="container">
 
-<section class="cart_section layout_padding-bottom py-5">
-  <div class="container">
+            <!-- Page Heading -->
+            <div class="heading_container heading_center mb-4">
+                <h2>Your Cart</h2>
+                <p class="text-muted">You currently have {{ cart_item_count }} item(s) in your cart.</p>
+            </div>
 
-    <!-- Page Heading -->
-    <div class="heading_container heading_center mb-4">
-      <h2>Your Cart</h2>
-      <p class="text-muted">You currently have {{ cart_item_count }} item(s) in your cart.</p>
-    </div>
+            {% if cart_items %}
+                <!-- Cart Table -->
+                <div class="table-responsive shadow-sm rounded">
+                    <table class="table table-bordered align-middle text-center">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">Item</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Subtotal</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
 
-    {% if cart_items %}
-      <!-- Cart Table -->
-      <div class="table-responsive shadow-sm rounded">
-        <table class="table table-bordered align-middle text-center">
-          <thead class="table-dark">
-            <tr>
-              <th scope="col">Item</th>
-              <th scope="col">Image</th>
-              <th scope="col">Price</th>
-              <th scope="col">Quantity</th>
-              <th scope="col">Subtotal</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for cart_item in cart_items %}
-              <tr>
-                <!-- Item name -->
-                <td class="fw-bold">{{ cart_item.item.Item_name }}</td>
+                        <tbody>
+                            {% for cart_item in cart_items %}
+                                <tr>
+                                    <!-- Item Name -->
+                                    <td class="fw-bold">{{ cart_item.item.Item_name }}</td>
 
-                <!-- Item image -->
-                <td>
-                  {% if cart_item.item.Image %}
-                    <img src="{{ cart_item.item.Image.url }}" alt="{{ cart_item.item.Item_name }}" width="60" class="rounded">
-                  {% else %}
-                    <img src="{% static 'images/default_item.png' %}" alt="No image" width="60" class="rounded">
-                  {% endif %}
-                </td>
+                                    <!-- Item Image -->
+                                    <td>
+                                        {% if cart_item.item.Image %}
+                                            <img src="{{ cart_item.item.Image.url }}" alt="{{ cart_item.item.Item_name }}" width="60" class="rounded">
+                                        {% else %}
+                                            <img src="{% static 'images/default_item.png' %}" alt="No image" width="60" class="rounded">
+                                        {% endif %}
+                                    </td>
 
-                <!-- Price -->
-                <td>
-                  {% if cart_item.has_discount %}
-                    <span class="text-muted" style="text-decoration: line-through;">${{ cart_item.original_price }}</span>
-                    <br>
-                    <span class="text-danger font-weight-bold">${{ cart_item.discounted_price }}</span>
-                  {% else %}
-                    ${{ cart_item.original_price }}
-                  {% endif %}
-                </td>
+                                    <!-- Price -->
+                                    <td>
+                                        {% if cart_item.has_discount %}
+                                            <span class="text-muted" style="text-decoration: line-through;">${{ cart_item.original_price }}</span>
+                                            <br>
+                                            <span class="text-danger font-weight-bold">${{ cart_item.discounted_price }}</span>
+                                        {% else %}
+                                            ${{ cart_item.original_price }}
+                                        {% endif %}
+                                    </td>
 
-                <!-- Quantity update form -->
-                <td>
-                  <form action="{% url 'update_cart' cart_item.item.id %}" method="post" class="d-flex justify-content-center">
-                    {% csrf_token %}
-                    <input 
-                      type="number" 
-                      name="quantity" 
-                      value="{{ cart_item.quantity }}" 
-                      min="1" 
-                      class="form-control form-control-sm w-50 text-center"
-                    >
-                    <button type="submit" class="btn btn-sm btn-outline-primary ms-2">
-                      Update
-                    </button>
-                  </form>
-                </td>
+                                    <!-- Quantity update form -->
+                                    <td>
+                                        <form action="{% url 'update_cart' cart_item.item.id %}" method="post" class="d-flex justify-content-center">
+                                            {% csrf_token %}
+                                            <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" class="form-control form-control-sm w-50 text-center">
+                                            <button type="submit" class="btn btn-sm btn-outline-primary ms-2">
+                                                Update
+                                            </button>
+                                        </form>
+                                    </td>
 
-                <!-- Subtotal -->
-                <td>
-                  {% if cart_item.has_discount %}
-                    <span class="text-muted" style="text-decoration: line-through;">${{ cart_item.original_price|floatformat:2 }}</span>
-                    <br>
-                    <span class="text-danger font-weight-bold">${{ cart_item.subtotal|floatformat:2 }}</span>
-                  {% else %}
-                    ${{ cart_item.subtotal|floatformat:2 }}
-                  {% endif %}
-                </td>
+                                    <!-- Subtotal -->
+                                    <td>
+                                        {% if cart_item.has_discount %}
+                                            <span class="text-muted" style="text-decoration: line-through;">${{ cart_item.original_price|floatformat:2 }}</span>
+                                            <br>
+                                            <span class="text-danger font-weight-bold">
+                                                ${{ cart_item.subtotal|floatformat:2 }}
+                                            </span>
+                                        {% else %}
+                                            ${{ cart_item.subtotal|floatformat:2 }}
+                                        {% endif %}
+                                    </td>
 
-                <!-- Remove button -->
-                <td>
-                  <form action="{% url 'update_cart' cart_item.item.id %}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="quantity" value="0">
-                    <button type="submit" class="btn btn-sm btn-outline-danger">
-                      Remove
-                    </button>
-                  </form>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+                                    <!-- Remove Button -->
+                                    <td>
+                                        <form action="{% url 'update_cart' cart_item.item.id %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="quantity" value="0">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                Remove
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
-      <!-- Cart Summary -->
-      <div class="cart_summary mt-4 p-3 bg-light rounded shadow-sm">
-        <h5 class="fw-bold">Cart Summary</h5>
-        <p class="mb-1">Total Items: {{ cart_item_count }}</p>
-        {% if total_discount > 0 %}
-          <p class="mb-1 text-muted" style="text-decoration: line-through;">Original Total: ${{ original_total|floatformat:2 }}</p>
-          <p class="mb-1 text-success">Discount: -${{ total_discount|floatformat:2 }}</p>
-        {% endif %}
-        <p class="mb-3">Total Price: <strong>${{ cart_total|floatformat:2 }}</strong></p>
+                <!-- Cart Summary -->
+                <div class="cart_summary mt-4 p-3 bg-light rounded shadow-sm">
+                    <h5 class="fw-bold">Cart Summary</h5>
+                    <p class="mb-1">Total Items: {{ cart_item_count }}</p>
 
-        <div class="d-flex justify-content-between">
-          <a href="{% url 'Menu' %}" class="btn btn-outline-secondary">
-            <i class="fa fa-arrow-left"></i> Continue Shopping
-          </a>
-          <a href="#" class="btn btn-success">
-            Checkout <i class="fa fa-credit-card"></i>
-          </a>
+                    {% if total_discount > 0 %}
+                        <p class="mb-1 text-muted" style="text-decoration: line-through;">Original Total: ${{ Original_total|floatformat:2 }}</p>
+
+                        <p class="mb-1 text-success">Discount: -${{ total_discount|floatformat:2 }}</p>
+                    {% endif %}
+
+                    <p class="mb-3">Total Price: <strong>${{ cart_total|floatformat:2 }}</strong></p>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'Menu' %}" class="btn btn-outline-secondary">
+                            <i class="fa fa-arrow-left"></i> Continue Shopping
+                        </a>
+
+                        {% if user.is_authenticated %}
+                            <!-- Display checkout button -->
+                            <a href="{% url 'checkout' %}" class="btn btn-success {% if not cart_items %}disabled{% endif %}">
+                                Checkout <i class="fa fa-credit-card"></i>
+                            </a>
+                        {% else %}
+                            <!-- Display login and register options for unauthenticated users -->
+                            <a href="{% url 'login' %}" class="btn btn-sm btn-outline-primary mr-2">
+                                <i class="fa fa-sign-in mr-1" aria-hidden="true"></i>Login
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+            {% else %}
+                <!-- Empty cart message -->
+                <div class="alert alert-info text-center">
+                    Your cart is empty. <a href="{% url 'Menu' %}">Browse our menu</a> to add items.
+                </div>
+            {% endif %}
         </div>
-      </div>
-
-    {% else %}
-      <!-- Empty cart message -->
-      <div class="alert alert-info text-center">
-        Your cart is empty. <a href="{% url 'Menu' %}">Browse our menu</a> to add items.
-      </div>
-    {% endif %}
-
-  </div>
-</section>
-
+    </section>
 {% endblock main %}

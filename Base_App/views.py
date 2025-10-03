@@ -9,8 +9,9 @@ from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from .forms import RegisterForm, LoginForm, UserUpdateForm, ProfileUpdateForm
-from Base_App.models import BookTable, AboutUs, Feedback, ItemList, Items, Profile, Offer
+from django.db import transaction
+from .forms import RegisterForm, LoginForm, UserUpdateForm, ProfileUpdateForm, CheckoutForm
+from Base_App.models import BookTable, AboutUs, Feedback, ItemList, Items, Profile, Offer, Order, OrderItem
 
 
 # =========================
@@ -382,3 +383,163 @@ def update_cart(request, item_id):
         request.session.modified = True
 
     return redirect('view_cart')
+
+
+# Checkout Functionality Views
+@login_required
+def checkout_view(request):
+    """
+    Handle the checkout process - display form and process order creation
+    """
+    # Get cart from session
+    cart = request.session.get('cart', {})
+    
+    # Check if cart is empty
+    if not cart:
+        messages.warning(request, "Your cart is empty. Please add items before checkout.")
+        return redirect('view_cart')
+    
+    # Calculate cart totals
+    cart_items = []
+    cart_total = 0
+    original_total = 0
+    
+    for item_id, quantity in cart.items():
+        try:
+            item = Items.objects.get(id=item_id)
+            discounted_price = item.get_discounted_price()
+            subtotal = discounted_price * quantity
+            
+            cart_items.append({
+                'item': item,
+                'quantity': quantity,
+                'subtotal': subtotal,
+                'discounted_price': discounted_price,
+            })
+            
+            cart_total += subtotal
+            original_total += item.Price * quantity
+            
+        except Items.DoesNotExist:
+            continue
+    
+    # If user is authenticated, pre-fill form with user data
+    initial_data = {}
+    if request.user.is_authenticated:
+        initial_data = {
+            'customer_name': f"{request.user.first_name} {request.user.last_name}".strip() or request.user.username,
+            'customer_email': request.user.email,
+        }
+    
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST, initial=initial_data)
+        
+        if form.is_valid():
+            try:
+                # Use transaction to ensure data consistency
+                with transaction.atomic():
+                    # Create order
+                    order = form.save(commit=False)
+                    if request.user.is_authenticated:
+                        order.user = request.user
+                    
+                    # Save order first to get ID
+                    order.save()
+                    
+                    # Create order items
+                    for cart_item in cart_items:
+                        OrderItem.objects.create(
+                            order=order,
+                            item=cart_item['item'],
+                            quantity=cart_item['quantity'],
+                            original_price=cart_item['item'].Price,
+                            final_price=cart_item['discounted_price'],
+                            item_name=cart_item['item'].Item_name
+                        )
+                    
+                    # Calculate and save final totals
+                    order.calculate_totals()
+                    
+                    # Clear the cart session
+                    request.session['cart'] = {}
+                    request.session.modified = True
+                    
+                    # Success message
+                    messages.success(
+                        request, 
+                        f"Order placed successfully! Your order number is #{order.order_number}. "
+                        f"We'll contact you at {order.customer_phone} for confirmation."
+                    )
+                    
+                    # Redirect to order confirmation page
+                    return redirect('order_confirmation', order_id=order.id)
+                    
+            except Exception as e:
+                # Log the error (in production, use proper logging)
+                print(f"Error creating order: {e}")
+                messages.error(
+                    request, 
+                    "There was an error processing your order. Please try again or contact support."
+                )
+                # Don't clear cart on error
+                
+    else:
+        form = CheckoutForm(initial=initial_data)
+    
+    context = {
+        'form': form,
+        'cart_items': cart_items,
+        'cart_total': cart_total,
+        'original_total': original_total,
+        'total_discount': original_total - cart_total,
+    }
+    
+    return render(request, 'Base_App/checkout.html', context)
+
+
+def order_confirmation(request, order_id):
+    """
+    Display order confirmation page after successful checkout
+    """
+    order = get_object_or_404(Order, id=order_id)
+
+    # Additional security: if user is logged in, verify they own this order
+    if request.user.is_authenticated and order.user != request.user:
+        messages.error(request, "You don't have permission to view this order")
+        return redirect('Home')
+    
+    context = {
+        'order': order,
+        'order_items': order.orderitem_set.all(),
+    }
+
+    return render(request, 'Base_App/order_confirmation.html', context)
+
+
+@login_required
+def order_history(request):
+    """
+    Display order history for logged-in users
+    """
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+
+    context = {
+        'orders': orders,
+    }
+
+    return render(request, 'Base_App/order_history.html', context)
+
+
+@login_required
+def order_detail(request, order_id):
+    """
+    Display detailed view of a specific order
+    """
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+
+    context = {
+        'order': order,
+        'order_items': order.orderitem_set.all(),
+    }
+
+    return render(request, 'Base_App/order_detail.html', context)

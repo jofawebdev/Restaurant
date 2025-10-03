@@ -143,6 +143,127 @@ class CartItem(models.Model):
     def subtotal(self):
         # Use discounted price if available
         return self.quantity * self.item.get_discounted_price()
+
+
+
+class Order(models.Model):
+    """
+    Model to store order information including customer details and order status
+    """
+    # Order status choices
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('preparing', 'Preparing'),
+        ('ready', 'Ready for Pickup/Delivery'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled'),
+    ]
+
+    # Payment status choices
+    PAYMENT_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('paid', 'Paid'),
+        ('failed', 'Failed'),
+        ('refunded', 'Refunded'),
+    ]
+
+    # Order Information
+    order_number = models.CharField(max_length=20, unique=True, editable=False)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
+    # Customer Information
+    customer_name = models.CharField(max_length=100)
+    customer_email = models.EmailField()
+    customer_phone = models.CharField(max_length=15)
+    customer_address = models.TextField(blank=True, null=True)
+    special_instructions = models.TextField(blank=True, null=True)
+
+    # Order Details
+    items = models.ManyToManyField(Items, through='OrderItem')
+    original_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    final_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    # Status and timestamps
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Order #{self.order_number} - {self.customer_name}"
+    
+    def save(self, *args, **kwargs):
+        """
+        Generate unique order number before saving if it's a new order
+        Format: ORDYYYYMMDDXXXX (Where XXXX is sequential number)
+        """
+        if not self.order_number:
+            today = timezone.now().strftime('%Y%m%d')
+            last_order = Order.objects.filter(
+                order_number__startswith=f'ORD{today}'
+            ).order_by('-order_number').first()
+
+            if last_order:
+                last_num = int(last_order.order_number[-4:])
+                new_num = last_num + 1
+            else:
+                new_num = 1
+
+            self.order_number = f'ORD{today}{new_num:04d}'
+
+        super().save(*args, **kwargs)
+
+    
+    def calculate_totals(self):
+        """
+        Calculate order totals based on order itesms
+        """
+        order_items = self.orderitem_set.all()
+        self.original_total = sum(item.original_price * item.quantity for item in order_items)
+        self.final_total = sum(item.final_price * item.quantity for item in order_items)
+        self.discount_amount = self.original_total - self.final_total
+        self.save()
+
+
+class OrderItem(models.Model):
+    """
+    Intermediate model to store items belonging to an order with their prices at time of order.
+    """
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    item = models.ForeignKey(Items, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    original_price = models.DecimalField(max_digits=8, decimal_places=2)
+    final_price = models.DecimalField(max_digits=8, decimal_places=2)
+    item_name = models.CharField(max_length=100) # Store item name at time of order
+
+    class Meta:
+        unique_together = ('order', 'item')
+
+    def __str__(self):
+        return f"{self.quantity} x {self.item_name} (Order # {self.order.order_number})"
+    
+
+    def save(self, *args, **kwargs):
+        """
+        Store item name and prices when saving
+        """
+        if not self.item_name:
+            self.item_name = self.item.Item_name
+        if not self.original_price:
+            self.original_price = self.item.Price
+        if not self.final_price:
+            self.final_price = self.item.get_discounted_price()
+
+        super().save(*args, **kwargs)
+
+    def subtotal(self):
+        return self.final_price * self.quantity
+
     
 
 
