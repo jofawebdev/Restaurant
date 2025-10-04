@@ -104,6 +104,12 @@
                                             </form>
                                         </div>
                                     </div>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'order_history' %}">
+                                            <i class="fa fa-history"></i> Order History
+                                        </a>
+                                    </li>
                                 {% else %}
                                     <!-- Display login and register options for unauthenticated users -->
                                     <a href="{% url 'login' %}" class="btn btn-sm btn-outline-light mr-2">

@@ -1,0 +1,74 @@
+{% extends "Base_App/base.html" %}
+{% load static %}
+
+{% block class %}class="sub_page"{% endblock class %}
+
+{% block main %}
+    <section class="layout_padding py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4">Your Order History</h2>
+
+                    {% if orders %}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Order Number</th>
+                                        <th>Date</th>
+                                        <th>Items</th>
+                                        <th>Total Amount</th>
+                                        <th>Status</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for order in orders %}
+                                        <tr>
+                                            <td>
+                                                <strong>#{{ order.order_number }}</strong>
+                                            </td>
+                                            <td>{{ order.created_at|date:"M j, Y" }}</td>
+                                            <td>
+                                                {% with order.orderitem_set.all as items %}
+                                                    {{ items|length }} item{{ items|pluralize }}
+                                                {% endwith %}
+                                            </td>
+
+                                            <td class="fw-bold text-success">${{ order.final_total|floatformat:2 }}</td>
+                                            <td>
+                                                <span class="badge
+                                                    {% if order.status == 'completed' %}bg-success
+                                                    {% elif order.status == 'cancelled' %}bg-danger
+                                                    {% else %}bg-warning{% endif %}">
+                                                    {{ order.get_status_display }}
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-outline-primary">
+                                                    View Details
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fa fa-shopping-bag fa-3x text-muted mb-3"></i>
+                            <h4 class="text-muted">No Orders Yet</h4>
+                            <p class="text-muted">You haven't placed any orders with us yet.</p>
+                            <a href="{% url 'Menu' %}" class="btn btn-primary mt-3">
+                                Start Ordering
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock main %}
