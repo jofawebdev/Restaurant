@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block class %}class="sub_page"{% endblock class %}
+{% block body_class %}sub_page{% endblock body_class %}
 
 {% block about_status %}active{% endblock about_status %}
 
@@ -15,200 +15,321 @@
     <!-- Enhanced About Section -->
     <section class="about_section layout_padding">
         <div class="container">
-            <!-- Main Heading -->
-            <div class="heading_container heading_center">
-                <h2>
-                    We are Feane
+            <!-- Main Heading with Animation -->
+            <div class="heading_container heading_center mb-5">
+                <h2 class="display-4 fw-bold text-gold">
+                    We Are Feane
                 </h2>
-                <p>Discover our story, passion, and commitment to excellence</p>
+                <p class="lead text-light opacity-75">Crafting culinary Excellence Since 2010</p>
+                <div class="heading-divider mx-auto my-4"></div>
             </div>
 
             <!-- Main Content Section -->
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <div class="img-box">
-                        <img src="{% static 'images/about-img.png' %}" alt="About Feane Restaurant" class="img-fluid">
+            <div class="row align-items-center mb-6">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="img-box position-relative">
+                        <img src="{% static 'images/about-img.png' %}" alt="Feane Restaurant Interior" class="img-fluid rounded-3 shadow-lg">
+                        <div class="floating-badge position-absolute top-0 start-0 bg-gold text-dark p-3 rounded-end">
+                            <h5 class="mb-0">Since 2010</h5>
+                            <small>13 Years of Excellence</small>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="detail-box">
-                        <div class="heading_container">
-                            <h2>
+
+                <div class="col-lg-6">
+                    <div class="detail-box ps-lg-4">
+                        <div class="heading_container mb-4">
+                            <h2 class="h1 fw-bold text-gold">
                                 Our Story
                             </h2>
                         </div>
-                        <div>
+
+                        <div class="story-content">
                             {% for item in data %}
-                                <p>{{ item.Description|safe }}</p>
+                                <p class="text-light fs-5 lh-base">
+                                    {{ item.Description|safe }}
+                                </p>
+                            {% empty %}
+                                <p class="text-light fs-5 lh-base">
+                                    Founded in 2010, Feane has been serving exceptional cuisine in a warm and inviting atmosphere. 
+                                    Our journey began with a simple vision: to create a dining experience that combines culinary excellence 
+                                    with genuine hospitality. Today, we continue to innovate while staying true to our roots.
+                                </p>
                             {% endfor %}
+                        </div>
+
+                        <div class="signature mt-4">
+                            <img src="{% static 'images/client1.jpg' %}" alt="Chef Signature" class="img-fluid" style="max-width: 200px;">
+                            <p class="text-gold mt-2">Michael Johnson - Head Chef & Founder</p>
                         </div>
                     </div>
                 </div>
             </div>
 
+
             <!-- Mission and Vision Section -->
-            <div class="row mt-5">
-                <div class="col-md-6">
-                    <div class="mission-box p-4">
-                        <div class="heading_container">
-                            <h3>
-                                <i class="fa fa-bullseye mr-2" aria-hidden="true"></i>Our Mission
-                            </h3>
+            <div class="row mb-6">
+                <!-- Our Mission -->
+                <div class="col-md-6 mb-4">
+                    <div class="mission-box p-4 h-100">
+                        <div class="icon-container mb-3">
+                            <i class="fa fa-bullseye fa-3x text-gold" aria-hidden="true"></i>
                         </div>
-                        <p>To provide exceptional culinary experiences using the freshest ingredients, served in a warm and inviting atmosphere that makes every guest feel special.</p>
+                        <div class="heading_container">
+                            <h3 class="h2 fw-bold text-gold">Our Mission</h3>
+                        </div>
+                        <p class="text-light fs-5 lh-base">
+                            To create unforgettable dining experiences through exceptional cuisine, 
+                            warm hospitality, and sustainable practices. We source the finest local 
+                            ingredients to craft dishes that tell a story and create lasting memories.
+                        </p>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="vision-box p-4">
-                        <div class="heading_container">
-                            <h3>
-                                <i class="fa fa-eye mr-2" aria-hidden="true"></i>Our Vision
-                            </h3>
+
+                <!-- Vision Section -->
+                <div class="col-md-6 mb-4">
+                    <div class="vision-box p-4 h-100">
+                        <div class="icon-container mb-3">
+                            <i class="fa fa-eye fa-3x text-gold"></i>
                         </div>
-                        <p>To be the most beloved restaurant in our community, known for innovation in cuisine while maintaining respect for culinary traditions and sustainable practices.</p>
+                        <div class="heading_container">
+                            <h3 class="h2 fw-bold text-gold">Our Vision</h3>
+                        </div>
+                        <p class="text-light fs-5 lh-base">
+                            To be the most cherished culinary destination in our community, 
+                            recognized for innovation, sustainability, and our commitment to 
+                            preserving culinary traditions while embracing modern techniques.
+                        </p>
                     </div>
                 </div>
             </div>
 
             <!-- Statistics Section -->
-            <div class="stats_section layout_padding2-top">
-                <div class="heading_container heading_center">
-                    <h2>
-                        By The Numbers
-                    </h2>
+            <div class="stats_section mb-6">
+                <div class="heading_container heading_center mb-5">
+                    <h2 class="display-5 fw-bold text-gold">By The Numbers</h2>
+                    <p class="text-light opacity-75">Our Journey in Figures</p>
                 </div>
-                <div class="row text-center">
+
+                <div class="row g-4 text-center">
+                    <!-- Years of Excellence Card -->
                     <div class="col-6 col-md-3">
                         <div class="stat-box">
-                            <h3 class="stat-number" data-count="13">0</h3>
-                            <p>Years of Excellence</p>
+                            <div class="stat-icon mb-3">
+                                <i class="fa fa-calendar-alt fa-2x text-gold" aria-hidden="true"></i>
+                            </div>
+                            <h3 class="stat-number display-6 fw-bold text-gold" data-count="13">0</h3>
+                            <p class="text-light fw-medium">Years of Excellence</p>
                         </div>
                     </div>
+                    
+                    <!-- Happy Customers Card -->
                     <div class="col-6 col-md-3">
                         <div class="stat-box">
-                            <h3 class="stat-number" data-count="25000">0</h3>
-                            <p>Happy Customers</p>
+                            <div class="stat-icon mb-3">
+                                <i class="fa fa-users fa-2x text-gold" aria-hidden="true"></i>
+                            </div>
+                            <h3 class="stat-number display-6 fw-bold text-gold" data-count="25000">0</h3>
+                            <p class="text-light fw-medium">Happy Customers</p>
                         </div>
                     </div>
+                    
+                    <!-- Menu Items Card -->
                     <div class="col-6 col-md-3">
                         <div class="stat-box">
-                            <h3 class="stat-number" data-count="50">0</h3>
-                            <p>Menu Items</p>
+                            <div class="stat-icon mb-3">
+                                <i class="fa fa-utensils fa-2x text-gold" aria-hidden="true"></i>
+                            </div>
+                            <h3 class="stat-number display-6 fw-bold text-gold" data-count="50">0</h3>
+                            <p class="text-light fw-medium">Menu Items</p>
                         </div>
                     </div>
+                    
+                    <!-- AWards Won Card -->
                     <div class="col-6 col-md-3">
                         <div class="stat-box">
-                            <h3 class="stat-number" data-count="15">0</h3>
-                            <p>Awards Won</p>
+                            <div class="stat-icon mb-3">
+                                <i class="fa fa-award fa-2x text-gold" aria-hidden="true"></i>
+                            </div>
+                            <h3 class="stat-number display-6 fw-bold text-gold" data-count="15">0</h3>
+                            <p class="text-light fw-medium">Awards Won</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Team Section -->
-            <div class="team_section layout_padding2-top">
-                <div class="heading_container heading_center">
-                    <h2>
-                        Meet Our Team
-                    </h2>
-                    <p>The talented individuals behind our success</p>
+            <div class="team_section mb-6">
+                <div class="heading_container heading_center mb-5">
+                    <h2 class="display-5 fw-bold text-gold">Meet Our Team</h2>
+                    <p class="text-light opacity-75">The Talented Individuals Behind Our Success</p>
                 </div>
-                <div class="row">
+                <div class="row g-4">
                     <div class="col-md-4">
                         <div class="team-box text-center">
-                            <div class="img-box">
-                                <img src="{% static 'images/team1.jpg' %}" alt="Head Chef" class="img-fluid">
-                                <div class="social-box">
-                                    <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                                    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                            <div class="img-box position-relative overflow-hidden rounded-3">
+                                <img src="{% static 'images/client2.jpg' %}" alt="Head Chef Michael Johnson" class="img-fluid team-img">
+                                <div class="social-box position-absolute w-100 d-flex justify-content-center">
+                                    <a href="#" class="social-link">
+                                        <i class="fa fa-facebook" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="#" class="social-link">
+                                        <i class="fa fa-twitter" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="#" class="social-link">
+                                        <i class="fa fa-instagram" aria-hidden="true"></i>
+                                    </a>
                                 </div>
                             </div>
-                            <h5>Michael Johnson</h5>
-                            <p>Head Chef</p>
+
+                            <div class="team-info mt-4">
+                                <h5 class="text-gold fw-bold">Michael Johnson</h5>
+                                <p class="text-light mb-2">Head Chef & Founder</p>
+                                <p class="team-bio text-light opacity-75 small">
+                                    With 15 years of culinary experience, Michael brings innovation and passion to every dish.
+                                </p>
+                            </div>
                         </div>
                     </div>
+
                     <div class="col-md-4">
                         <div class="team-box text-center">
-                            <div class="img-box">
-                                <img src="{% static 'images/team2.jpg' %}" alt="Pastry Chef" class="img-fluid">
-                                <div class="social-box">
-                                    <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                                    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                            <div class="img-box position-relative overflow-hidden rounded-3">
+                                <img src="{% static 'images/client1.jpg' %}" alt="Pastry Chef Sarah Williams" class="img-fluid team-img">
+                                <div class="social-box position-absolute w-100 d-flex justify-content-center">
+                                    <a href="https://www.facebook.com/" class="social-link">
+                                        <i class="fa fa-facebook" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="https://www.twitter.com/" class="social-link">
+                                        <i class="fa fa-twitter" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="https://www.instagram.com/" class="social-link">
+                                        <i class="fa fa-instagram" aria-hidden="true"></i>
+                                    </a>
                                 </div>
                             </div>
-                            <h5>Sarah Williams</h5>
-                            <p>Pastry Chef</p>
+                            <div class="team-info mt-4">
+                                <h5 class="text-gold fw-bold">Sarah Williams</h5>
+                                <p class="text-light mb-2">Pastry Chef</p>
+                                <p class="team-bio text-light opacity-75 small">
+                                    Sarah's desserts are works of art, combining traditional techniques with modern flair.
+                                </p>
+                            </div>
                         </div>
                     </div>
+
                     <div class="col-md-4">
                         <div class="team-box text-center">
-                            <div class="img-box">
-                                <img src="{% static 'images/team3.jpg' %}" alt="Restaurant Manager" class="img-fluid">
-                                <div class="social-box">
-                                    <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                                    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                            <div class="img-box position-relative overflow-hidden rounded-3">
+                                <img src="{% static 'images/client2.jpg' %}" alt="Restaurant Manager David Chen" class="img-fluid team-img">
+                                <div class="social-box position-absolute w-100 d-flex justify-content-center">
+                                    <a href="#" class="social-link">
+                                        <i class="fa fa-facebook" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="#" class="social-link">
+                                        <i class="fa fa-twitter" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="#" class="social-link">
+                                        <i class="fa fa-instagram" aria-hidden="true"></i>
+                                    </a>
                                 </div>
                             </div>
-                            <h5>David Chen</h5>
-                            <p>Restaurant Manager</p>
+
+                            <div class="team-info mt-4">
+                                <h5 class="text-gold fw-bold">David Chen</h5>
+                                <p class="text-light mb-2">Restaurant Manager</p>
+                                <p class="team-bio text-light opacity-75 small">
+                                    David ensures every guest experiences the perfect blend of service and hospitality.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Testimonials Section -->
-            <div class="testimonials_section layout_padding2-top">
-                <div class="heading_container heading_center">
-                    <h2>
-                        What Our Customers Say
-                    </h2>
+            <div class="testimonials_section">
+                <div class="heading_container heading_center mb-5">
+                    <h2 class="display-5 fw-bold text-gold">What Our Customers Say</h2>
+                    <p class="text-light opacity-75">Real Experiences from Our Valued Guests</p>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
+
+                <div class="row justify-content-center">
+                    <div class="col-12">
                         <div class="testimonial-carousel owl-carousel">
+                            <!-- Testimonial 1 -->
                             <div class="testimonial-box">
-                                <div class="rating">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                <div class="rating mb-3">
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
                                 </div>
-                                <p>"The best dining experience I've had this year! The food was exceptional and the service was impeccable."</p>
-                                <div class="client-info">
-                                    <h6>Jennifer Martinez</h6>
-                                    <span>Regular Customer</span>
+                                <p class="testimonial-text">
+                                    "The best dining experience I've had this year! The food was exceptional, 
+                                    the ambiance was perfect, and the service was impeccable. Every dish told a story."
+                                </p>
+                                <div class="client-info mt-4 pt-3 border-top border-gold">
+                                    <h6 class="text-gold fw-bold mb-1">Jennifer Martinez</h6>
+                                    <span class="text-light opacity-75">Regular Customer</span>
                                 </div>
                             </div>
+
+                            <!-- Testimonial 2 -->
                             <div class="testimonial-box">
-                                <div class="rating">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                <div class="rating mb-3">
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
                                 </div>
-                                <p>"I hosted my wedding reception at Feane and it was absolutely perfect. The team went above and beyond."</p>
-                                <div class="client-info">
-                                    <h6>Robert and Emily Turner</h6>
-                                    <span>Event Hosts</span>
+                                <p class="testimonial-text">
+                                    "I hosted my wedding reception at Feane and it was absolutely perfect. 
+                                    The team went above and beyond to make our special day unforgettable."
+                                </p>
+                                <div class="client-info mt-4 pt-3 border-top border-gold">
+                                    <h6 class="text-gold fw-bold mb-1">Robert & Emily Turner</h6>
+                                    <span class="text-light opacity-75">Events Hosts</span>
                                 </div>
                             </div>
+
+                            <!-- Testimonial 3 -->
                             <div class="testimonial-box">
-                                <div class="rating">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star-half-alt" aria-hidden="true"></i>
+                                <div class="rating mb-3">
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
                                 </div>
-                                <p>"As a food critic, I'm rarely impressed, but Feane exceeded all my expectations. A true culinary gem."</p>
-                                <div class="client-info">
-                                    <h6>Thomas O'Reilly</h6>
-                                    <span>Food Critic</span>
+                                <p class="testimonial-text">
+                                    "As a food critic, I'm rarely impressed, but Feane exceeded all my expectations. 
+                                    A true culinary gem that combines innovation with tradition flawlessly."
+                                </p>
+                                <div class="client-info mt-4 pt-3 border-top border-gold">
+                                    <h6 class="text-gold fw-bold mb-1">Thomas O'Reilly</h6>
+                                    <span class="text-light opacity-75">Food Critic</span>
+                                </div>
+                            </div>
+
+                            <!-- Testimonial 4 -->
+                            <div class="testimonial-box">
+                                <div class="rating mb-3">
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                    <i class="fa fa-star text-gold" aria-hidden="true"></i>
+                                </div>
+                                <p class="testimonial-text">
+                                    "The attention to detail in every aspect of the dining experience is remarkable. 
+                                    From the warm welcome to the final course, everything was perfect."
+                                </p>
+                                <div class="client-info mt-4 pt-3 border-top border-gold">
+                                    <h6 class="text-gold fw-bold mb-1">Maria Rodriguez</h6>
+                                    <span class="text-light opacity-75">Food Blogger</span>
                                 </div>
                             </div>
                         </div>
@@ -217,11 +338,8 @@
             </div>
         </div>
     </section>
-    <!-- /End Enhanced About Section -->
 {% endblock main %}
 
 {% block extra_js %}
-    <!-- About Page Specific JS -->
     <script src="{% static 'js/about.js' %}"></script>
 {% endblock extra_js %}
-

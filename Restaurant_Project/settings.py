@@ -122,16 +122,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+# Static files configuration
 STATIC_URL = 'static/'
 
+# Location of static files during development
 STATICFILES_DIRS = [os.path.join(BASE_DIR / "static")]
 
-
+# Media Files Configuration
 MEDIA_URL = 'media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
+# Crispy Forms Configuration
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 

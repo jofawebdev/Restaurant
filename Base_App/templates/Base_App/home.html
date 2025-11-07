@@ -5,259 +5,247 @@
 {% load static %}
 
 {% block slider %}
-    <!-- Slider Section -->
-    <section class="slider_section">
-        <div id="customCarousel1" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-7 col-lg-6">
-                                <div class="detail-box">
-                                    <h1>
-                                        Fast Food Restaurant
-                                    </h1>
-                                    <p>
-                                        Welcome to our quick-service restaurant, where delicious meets convenient! We pride ourselves on using quality ingredients to create mouthwatering meals served with lightning-fast efficiency.
-                                    </p>
-                                    <div class="btn-box">
-                                        <a href="" class="btn1">
-                                            Order Now
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="carousel-item">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-7 col-lg-6">
-                                <div class="detail-box">
-                                    <h1>
-                                        Fast Food Restaurant
-                                    </h1>
-                                    <p>
-                                        Hungry doesn't have to mean waiting. Our kitchen turns out fresh, flavorful meals at the speed of your cravings. From cheesy favorites to hearty classics, everything we serve is made with care and ready when you are.
-                                    </p>
-                                    <div class="btn-box">
-                                        <a href="" class="btn1">
-                                            Order Now
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="carousel-item">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-7 col-lg-6">
-                                <div class="detail-box">
-                                    <h1>
-                                        Fast Food Restaurant
-                                    </h1>
-                                    <p>
-                                        Welcome in. We're all about good food made simple—fresh ingredients, bold flavors, and quick service. Whether you're grabbing a bite on the go or settling in with friends, we've got something that'll hit the spot.
-                                    </p>
-                                    <div class="btn-box">
-                                        <a href="" class="btn1">
-                                            Order Now
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-
-            <div class="container">
-                <ol class="carousel-indicators">
-                    <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
-                    <li data-target="#customCarousel1" data-slide-to="1"></li>
-                    <li data-target="#customCarousel1" data-slide-to="2"></li>
-                </ol>
-            </div>
+<!-- Hero Slider Section -->
+<section class="slider_section">
+    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <!-- Carousel Indicators -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
-
-    </section>
-    <!-- End Slider Section -->
-{% endblock slider %}
-
-{% block main %}
-
-    <!-- Offer Section -->
-    <section class="offer_section layout_padding-bottom">
-        <div class="offer_container">
-            <div class="container">
-                <!-- Section Heading -->
-                <div class="row mb-4">
-                    <div class="col-12 text-center">
-                        <h2 class="section-heading">Special Offers</h2>
-                        <p class="section-subheading">Don't miss our limited-time deals</p>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <!-- Dynamic Offer Boxes -->
-                    {% for offer in offers %}
-                        <div class="col-md-6 mb-4">
-                            <div class="box h-100">
-                                <!-- Offer Image -->
-                                <div class="img-box">
-                                    {% if offer.image %}
-                                        <img src="{{ offer.image.url }}" alt="{{ offer.title }}" class="img-fluid">
-                                    {% else %}
-                                        <!-- Fallback image if no offer image is set -->
-                                        <img src="{% static 'images/o' %}{{ forloop.counter }}.jpg" alt="{{ offer.title }}" class="img-fluid">
-                                    {% endif %}
-
-                                    <!-- Offer Badge -->
-                                    <div class="offer-badge">
-                                        {{ offer.discount_percent }}% OFF
-                                    </div>
-                                </div>
-
-                                <!-- Offer Details -->
-                                <div class="detail-box">
-                                    <!-- Offer Title -->
-                                    <h5>{{ offer.title }}</h5>
-
-                                    <!-- Offer Description (if available) -->
-                                    {% if offer.description %}
-                                        <p class="offer-description">
-                                            {{ offer.description }}
-                                        </p>
-                                    {% endif %}
-
-                                    <!-- Discount Display -->
-                                    <h6>
-                                        <span>{{ offer.discount_percent }}%</span> Off
-                                    </h6>
-
-                                    <!-- Valid Until Date -->
-                                    <p class="valid-until">
-                                        Valid until: {{ offer.end_date|date:"F j, Y" }}
-                                    </p>
-
-                                    <!-- Order Now Button -->
-                                    <a href="{% url 'Menu' %}" class="order-btn">
+        
+        <!-- Carousel Items -->
+        <div class="carousel-inner">
+            <!-- Slide 1 -->
+            <div class="carousel-item active">
+                <div class="container">
+                    <div class="row align-items-center min-vh-75">
+                        <div class="col-md-7 col-lg-6">
+                            <div class="hero-content">
+                                <h1 class="hero-title display-4 fw-bold mb-3">
+                                    Fast Food Restaurant
+                                </h1>
+                                <p class="hero-text lead mb-4">
+                                    Welcome to our quick-service restaurant, where delicious meets convenient! We pride ourselves on using quality ingredients to create mouthwatering meals served with lightning-fast efficiency.
+                                </p>
+                                <div class="hero-actions">
+                                    <a href="{% url 'Menu' %}" class="btn btn-primary btn-lg px-4 py-2">
                                         Order Now
-                                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
-                                            <g>
-                                                <g>
-                                                    <path d="M345.6,338.862c-29.184,0-53.248,23.552-53.248,53.248c0,29.184,23.552,53.248,53.248,53.248
-                                                    c29.184,0,53.248-23.552,53.248-53.248C398.336,362.926,374.784,338.862,345.6,338.862z" />
-                                                </g>
-                                            </g>
-                                            <g>
-                                                <g>
-                                                    <path d="M439.296,84.91c-1.024,0-2.56-0.512-4.096-0.512H112.64l-5.12-34.304C104.448,27.566,84.992,10.67,61.952,10.67H20.48
-                                                    C9.216,10.67,0,19.886,0,31.15c0,11.264,9.216,20.48,20.48,20.48h41.472c2.56,0,4.608,2.048,5.12,4.608l31.744,216.064
-                                                    c4.096,27.136,27.648,47.616,55.296,47.616h212.992c26.624,0,49.664-18.944,55.296-45.056l33.28-166.4
-                                                    C457.728,97.71,450.56,86.958,439.296,84.91z" />
-                                                </g>
-                                            </g>
-                                            <g>
-                                                <g>
-                                                    <path d="M215.04,389.55c-1.024-28.16-24.576-50.688-52.736-50.688c-29.696,1.536-52.224,26.112-51.2,55.296
-                                                    c1.024,28.16,24.064,50.688,52.224,50.688h1.024C193.536,443.31,216.576,418.734,215.04,389.55z" />
-                                                </g>
-                                            </g>
-                                        </svg>
                                     </a>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
 
-                        <!-- Add a new row after every 2 offers for better spacing on mobile -->
-                        {% if forloop.counter|divisibleby:2 and not forloop.last %}
-                            <div class="row"></div>
-                        {% endif %}
-
-                        {% empty %}
-                        <!-- Fallback content if no offers are available -->
-                        <div class="col-12 text-center">
-                            <div class="no-offers-message">
-                                <h4>No current offers</h4>
-                                <p>Check back soon for special promotions!</p>
-                                <a href="{% url 'Menu' %}" class="btn btn-primary">View Our Menu</a>
+            <!-- Slide 2 -->
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row align-items-center min-vh-75">
+                        <div class="col-md-7 col-lg-6">
+                            <div class="hero-content">
+                                <h1 class="hero-title display-4 fw-bold mb-3">
+                                    Fast Food Restaurant
+                                </h1>
+                                <p class="hero-text lead mb-4">
+                                    Hungry doesn't have to mean waiting. Our kitchen turns out fresh, flavorful meals at the speed of your cravings. From cheesy favorites to hearty classics, everything we serve is made with care and ready when you are.
+                                </p>
+                                <div class="hero-actions">
+                                    <a href="{% url 'Menu' %}" class="btn btn-primary btn-lg px-4 py-2">
+                                        Order Now
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    {% endfor %}
+                    </div>
                 </div>
+            </div>
 
-                <!-- View All Offers Link (if you have a dedicated offers page) -->
-                {% if offers.count > 2 %}
-                    <div class="row mt-4">
-                        <div class="col-12 text-center">
-                            <a href="{% url 'Menu' %}" class="view-all-offers">View All Offers</a>
+            <!-- Slide 3 -->
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row align-items-center min-vh-75">
+                        <div class="col-md-7 col-lg-6">
+                            <div class="hero-content">
+                                <h1 class="hero-title display-4 fw-bold mb-3">
+                                    Fast Food Restaurant
+                                </h1>
+                                <p class="hero-text lead mb-4">
+                                    Welcome in. We're all about good food made simple—fresh ingredients, bold flavors, and quick service. Whether you're grabbing a bite on the go or settling in with friends, we've got something that'll hit the spot.
+                                </p>
+                                <div class="hero-actions">
+                                    <a href="{% url 'Menu' %}" class="btn btn-primary btn-lg px-4 py-2">
+                                        Order Now
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                {% endif %}
+                </div>
             </div>
         </div>
-    </section>
-    <!-- /End Offer Section -->
 
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+<!-- End Hero Slider Section -->
+{% endblock slider %}
 
-    <!-- Food Section -->
-    <!-- Categories are filtered client-side using JavaScript, so users stay on the homepage instead of being redirected. -->
-    <section class="food_section layout_padding-bottom">
-        <div class="container py-5">
-
-            <!-- Section Heading -->
-            <div class="heading_container heading_center">
-                <h2>Our Menu</h2>
+{% block main %}
+<!-- Special Offers Section -->
+<section class="offers-section py-5">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="section-title display-5 fw-bold mb-3">Special Offers</h2>
+                <p class="section-subtitle lead text-muted">Don't miss our limited-time deals</p>
             </div>
+        </div>
 
-            <!-- Category Filter Tabs -->
-            <!-- `data-filter` attributes are used by JS to show/hide items -->
-            <ul class="filters_menu">
-                <li class="active" data-filter="*">All</li>
-                {% for category in categories %}
-                    <li data-filter=".{{ category.slug }}">{{ category.Category_name }}</li>
-                {% empty %}
-                    <li>No categories available</li>
-                {% endfor %}
-            </ul>
+        <!-- Offers Grid -->
+        <div class="row g-4">
+            {% for offer in offers %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="offer-card card h-100 border-0 shadow-sm overflow-hidden">
+                        <!-- Offer Image -->
+                        <div class="offer-image position-relative">
+                            {% if offer.image %}
+                                <img src="{{ offer.image.url }}" class="card-img-top" alt="{{ offer.title }}">
+                            {% else %}
+                                <img src="{% static 'images/o' %}{{ forloop.counter }}.jpg" class="card-img-top" alt="{{ offer.title }}">
+                            {% endif %}
+                            
+                            <!-- Discount Badge -->
+                            <div class="offer-badge position-absolute top-0 end-0 bg-danger text-white px-3 py-2 m-3 rounded-pill fw-bold">
+                                {{ offer.discount_percent }}% OFF
+                            </div>
+                        </div>
+                        
+                        <!-- Offer Content -->
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold">{{ offer.title }}</h5>
+                            
+                            {% if offer.description %}
+                                <p class="card-text text-muted mb-3">{{ offer.description }}</p>
+                            {% endif %}
+                            
+                            <div class="offer-details mt-auto">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-primary fw-bold fs-5">{{ offer.discount_percent }}% Off</span>
+                                    <small class="text-muted">Valid until: {{ offer.end_date|date:"F j, Y" }}</small>
+                                </div>
+                                
+                                <a href="{% url 'Menu' %}" class="btn btn-primary w-100 d-flex align-items-center justify-content-center">
+                                    <span>Order Now</span>
+                                    <i class="fas fa-shopping-cart ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            {% empty %}
+                <!-- Fallback content if no offers are available -->
+                <div class="col-12 text-center py-5">
+                    <div class="no-offers-message">
+                        <i class="fas fa-tag display-1 text-muted mb-3"></i>
+                        <h4 class="mb-3">No current offers</h4>
+                        <p class="text-muted mb-4">Check back soon for special promotions!</p>
+                        <a href="{% url 'Menu' %}" class="btn btn-primary">View Our Menu</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
 
-            <!-- Menu Items Grid -->
-            <div class="filters-content">
-                <div class="row grid">
+        <!-- View All Offers Link -->
+        {% if offers.count > 3 %}
+            <div class="row mt-5">
+                <div class="col-12 text-center">
+                    <a href="{% url 'Menu' %}" class="btn btn-outline-primary btn-lg">View All Offers</a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+<!-- End Special Offers Section -->
+
+<!-- Menu Section -->
+<section class="menu-section py-5 bg-light">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="section-title display-5 fw-bold mb-3">Our Menu</h2>
+                <p class="section-subtitle lead text-muted">Discover our delicious offerings</p>
+            </div>
+        </div>
+
+        <!-- Category Filter Tabs -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <ul class="nav nav-pills justify-content-center flex-wrap" id="categoryTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">
+                            All
+                        </button>
+                    </li>
+                    {% for category in categories %}
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="{{ category.slug }}-tab" data-bs-toggle="tab" data-bs-target="#{{ category.slug }}" type="button" role="tab" aria-controls="{{ category.slug }}" aria-selected="false">
+                                {{ category.Category_name }}
+                            </button>
+                        </li>
+                    {% empty %}
+                        <li class="nav-item">
+                            <span class="nav-link disabled">No categories available</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Menu Items Grid -->
+        <div class="tab-content" id="categoryTabContent">
+            <!-- All Items Tab -->
+            <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                <div class="row g-4">
                     {% for item in items %}
-                        <!-- Each item is tagged with its category slug for filtering -->
-                        <div class="col-sm-6 col-lg-4 all {{ item.Category.slug }}">
-                            <div class="box">
+                        <div class="col-md-6 col-lg-4 col-xl-3">
+                            <div class="menu-item card h-100 border-0 shadow-sm overflow-hidden">
                                 <!-- Item Image -->
-                                <div class="img-box">
+                                <div class="item-image position-relative overflow-hidden">
                                     {% if item.Image %}
-                                        <img src="{{ item.Image.url }}" alt="{{ item.Item_name }}">
+                                        <img src="{{ item.Image.url }}" class="card-img-top" alt="{{ item.Item_name }}">
                                     {% else %}
-                                        <img src="{% static 'images/default_item.png' %}" alt="No image available">
+                                        <img src="{% static 'images/default_item.png' %}" class="card-img-top" alt="No image available">
                                     {% endif %}
                                 </div>
-
+                                
                                 <!-- Item Details -->
-                                <div class="detail-box">
-                                    <h5>{{ item.Item_name }}</h5>
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title fw-bold">{{ item.Item_name }}</h5>
+                                    
                                     {% if item.description %}
-                                        <p>{{ item.description }}</p>
+                                        <p class="card-text text-muted flex-grow-1">{{ item.description }}</p>
                                     {% endif %}
-
-                                    <!-- Price + Add-to-Cart button -->
-                                    <div class="options d-flex justify-content-between align-items-center">
-                                        <h6 class="mb-0">${{ item.Price }}</h6>
-                                        <form action="{% url 'add_to_cart' item.id %}" method="post">
+                                    
+                                    <div class="item-actions d-flex justify-content-between align-items-center mt-auto">
+                                        <span class="price fw-bold text-primary">${{ item.Price }}</span>
+                                        <form action="{% url 'add_to_cart' item.id %}" method="post" class="d-inline">
                                             {% csrf_token %}
-                                            <button type="submit" class="btn btn-sm btn-outline-light">
-                                                <i class="fa fa-cart-plus"></i>
+                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-cart-plus me-1"></i>
                                                 Add
                                             </button>
                                         </form>
@@ -266,152 +254,223 @@
                             </div>
                         </div>
                     {% empty %}
-                        <div class="col-12">
-                            <p>No menu items found.</p>
+                        <div class="col-12 text-center py-5">
+                            <p class="text-muted">No menu items found.</p>
                         </div>
                     {% endfor %}
                 </div>
             </div>
 
-            <!-- View More Button -->
-            <!-- This can link to my full menu page -->
-            <div class="btn-box mt-4 text-center">
-                <a href="{% url 'Menu' %}">View More</a>
+            <!-- Category Tabs -->
+            {% for category in categories %}
+                <div class="tab-pane fade" id="{{ category.slug }}" role="tabpanel" aria-labelledby="{{ category.slug }}-tab">
+                    <div class="row g-4">
+                        {% for item in items %}
+                            {% if item.Category.slug == category.slug %}
+                                <div class="col-md-6 col-lg-4 col-xl-3">
+                                    <div class="menu-item card h-100 border-0 shadow-sm overflow-hidden">
+                                        <!-- Item Image -->
+                                        <div class="item-image position-relative overflow-hidden">
+                                            {% if item.Image %}
+                                                <img src="{{ item.Image.url }}" class="card-img-top" alt="{{ item.Item_name }}">
+                                            {% else %}
+                                                <img src="{% static 'images/default_item.png' %}" class="card-img-top" alt="No image available">
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <!-- Item Details -->
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title fw-bold">{{ item.Item_name }}</h5>
+                                            
+                                            {% if item.description %}
+                                                <p class="card-text text-muted flex-grow-1">{{ item.description }}</p>
+                                            {% endif %}
+                                            
+                                            <div class="item-actions d-flex justify-content-between align-items-center mt-auto">
+                                                <span class="price fw-bold text-primary">${{ item.Price }}</span>
+                                                <form action="{% url 'add_to_cart' item.id %}" method="post" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-cart-plus me-1"></i>
+                                                        Add
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% empty %}
+                            <div class="col-12 text-center py-5">
+                                <p class="text-muted">No items in this category.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- View More Button -->
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <a href="{% url 'Menu' %}" class="btn btn-outline-primary btn-lg">View Full Menu</a>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+<!-- End Menu Section -->
 
-
-    <!-- Book Section -->
-    <section class="book_section layout_padding">
-        <div class="container">
-            <div class="heading_container">
-                <h2>
-                    Book A Table
-                </h2>
+<!-- Book Table Section -->
+<section class="book-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <!-- Section Header -->
+            <div class="col-12 text-center mb-5">
+                <h2 class="section-title display-5 fw-bold">Book A Table</h2>
+                <p class="section-subtitle lead text-muted">Reserve your spot for a memorable dining experience</p>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form_container">
-                        <form action="{% url 'Book_Table' %}" method="POST">
-                            {% csrf_token %}
-                            <div>
-                                <input type="text" class="form-control" name="user_name" required placeholder="Your Name" />
+            
+            <!-- Booking Form -->
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="booking-form card border-0 shadow-sm p-4">
+                    <form action="{% url 'Book_Table' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="user_name" class="form-label">Your Name</label>
+                                <input type="text" class="form-control" id="user_name" name="user_name" required placeholder="Your Name">
                             </div>
-                            <div>
-                                <input type="text" class="form-control" name="phone_number" required placeholder="Phone Number" />
+                            <div class="col-md-6">
+                                <label for="phone_number" class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" id="phone_number" name="phone_number" required placeholder="Phone Number">
                             </div>
-                            <div>
-                                <input type="email" class="form-control" name="user_email" placeholder="Your Email" />
+                            <div class="col-12">
+                                <label for="user_email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="user_email" name="user_email" placeholder="Your Email">
                             </div>
-                            <div>
-                                <select class="form-control nice-select wide" required name="total_person">
-                                    <option value="" disabled selected>
-                                        How many persons?
-                                    </option>
-                                    <option value="2">
-                                        2
-                                    </option>
-                                    <option value="3">
-                                        3
-                                    </option>
-                                    <option value="4">
-                                        4
-                                    </option>
-                                    <option value="5">
-                                        5
-                                    </option>
+                            <div class="col-md-6">
+                                <label for="total_person" class="form-label">Number of Persons</label>
+                                <select class="form-select" id="total_person" required name="total_person">
+                                    <option value="" disabled selected>How many persons?</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6+</option>
                                 </select>
                             </div>
-                            <div>
-                                <input type="date" required name="booking_date" class="form-control">
+                            <div class="col-md-6">
+                                <label for="booking_date" class="form-label">Booking Date</label>
+                                <input type="date" class="form-control" id="booking_date" required name="booking_date">
                             </div>
-                            <div class="btn_box">
-                                <button>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary w-100 py-2">
                                     Book Now
                                 </button>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="col-md-6">
-                    <div class="map_container">
-                        <div id="googleMap"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End Book Section -->
-
-
-    <!-- Client Section -->
-    <section class="client_section layout_padding-bottom">
-        <div class="container">
-            <div class="heading_container heading_center psudo_white_primary mb_45">
-                <h2>
-                    What Says Our Customers
-                </h2>
             </div>
             
-            <div class="carousel-wrap row">
-                <div class="owl-carousel client_owl-carousel">
-                    {% for k in review %}
-                    <div class="item">
-                        <div class="box">
-                            <div class="detail-box">
-                                <p>
-                                    {{ k.Description }}
-                                </p>
-                                <h6>
-                                    {{ k.User_name }}
-                                </h6>
-                                <p>
-                                    Rating : {{ k.Rating }} /5
-                                </p>
-                            </div>
-                            <div class="img-box">
-                                <img src="/media/{{ k.Image }}" alt="{{ k.Image }}" class="box-img">
+            <!-- Map Section -->
+            <div class="col-lg-6">
+                <div class="map-container card border-0 shadow-sm overflow-hidden">
+                    <div id="googleMap" class="map-placeholder" style="height: 400px;">
+                        <!-- Google Maps will be loaded here -->
+                        <div class="d-flex justify-content-center align-items-center h-100 bg-light">
+                            <div class="text-center">
+                                <i class="fas fa-map-marker-alt fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">Interactive Map Loading...</p>
                             </div>
                         </div>
                     </div>
-                    {% endfor %}                   
                 </div>
             </div>
-
         </div>
-    </section>
+    </div>
+</section>
+<!-- End Book Table Section -->
+
+<!-- Testimonials Section -->
+<section class="testimonials-section py-5 bg-light">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="section-title display-5 fw-bold mb-3">What Our Customers Say</h2>
+                <p class="section-subtitle lead text-muted">Hear from our satisfied diners</p>
+            </div>
+        </div>
+        
+        <!-- Testimonials Carousel -->
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="testimonials-carousel owl-carousel owl-theme">
+                    {% for k in review %}
+                        <div class="testimonial-item">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body p-4">
+                                    <div class="testimonial-content">
+                                        <p class="testimonial-text mb-4">
+                                            <i class="fas fa-quote-left text-primary me-2"></i>
+                                            {{ k.Description }}
+                                            <i class="fas fa-quote-right text-primary ms-2"></i>
+                                        </p>
+                                        
+                                        <div class="testimonial-author d-flex align-items-center">
+                                            <div class="author-image me-3">
+                                                {% if k.Image %}
+                                                    <img src="/media/{{ k.Image }}" alt="{{ k.User_name }}" class="rounded-circle" width="60" height="60">
+                                                {% else %}
+                                                    <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white" style="width: 60px; height: 60px;">
+                                                        <i class="fas fa-user fa-lg"></i>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="author-info">
+                                                <h6 class="mb-1 fw-bold">{{ k.User_name }}</h6>
+                                                <div class="rating text-warning">
+                                                    {% for i in "12345" %}
+                                                        {% if forloop.counter <= k.Rating %}
+                                                            <i class="fas fa-star"></i>
+                                                        {% else %}
+                                                            <i class="far fa-star"></i>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <span class="text-muted ms-1">({{ k.Rating }}/5)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="testimonial-item">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body p-4 text-center">
+                                    <i class="fas fa-comments display-1 text-muted mb-3"></i>
+                                    <h5>No Reviews Yet</h5>
+                                    <p class="text-muted">Be the first to share your experience!</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Testimonials Section -->
 {% endblock main %}
 
+{% block extra_css %}
+<!-- Home Page Specific CSS -->
+<link href="{% static 'css/home.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+
 {% block extra_js %}
-<!-- ===== CATEGORY FILTER SCRIPT ===== -->
-<!-- Handles filtering logic for the homepage menu section -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const filterButtons = document.querySelectorAll(".filters_menu li");
-    const items = document.querySelectorAll(".grid .all");
-
-    filterButtons.forEach(btn => {
-        btn.addEventListener("click", function () {
-            // Remove "active" from all buttons
-            filterButtons.forEach(b => b.classList.remove("active"));
-
-            // Highlight the clicked button
-            this.classList.add("active");
-
-            // Get filter target
-            const filter = this.getAttribute("data-filter");
-
-            // Show/Hide menu items based on category
-            items.forEach(item => {
-                if (filter === "*" || item.classList.contains(filter.substring(1))) {
-                    item.style.display = "block";
-                } else {
-                    item.style.display = "none";
-                }
-            });
-        });
-    });
-});
-</script>
+<!-- Home Page Specific JavaScript -->
+<script src="{% static 'js/home.js' %}"></script>
 {% endblock extra_js %}
