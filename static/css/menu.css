@@ -1,0 +1,185 @@
+/* Menu Section Styles */
+.menu-section {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Section Title Styling */
+.section-title {
+    color: #2c3e50;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, #3498db, #2c3e50);
+    border-radius: 2px;
+}
+
+/* Category Filter Tabs */
+.nav-pills .nav-link {
+    color: #6c757d;
+    font-weight: 500;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.nav-pills .nav-link:hover {
+    color: #495057;
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+}
+
+.nav-pills .nav-link.active {
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+    color: white;
+    border-color: #3498db;
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+/* Menu Item Cards */
+.menu-item {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.menu-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Item Image Styling */
+.item-image {
+    height: 200px;
+    overflow: hidden;
+}
+
+.item-image img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.menu-item:hover .item-image img {
+    transform: scale(1.05);
+}
+
+/* Discount Badge */
+.discount-badge {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    box-shadow: 0 2px 5px rgba(220, 53, 69, 0.3);
+    z-index: 1;
+}
+
+/* Price Styling */
+.price-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.original-price {
+    font-size: 0.9rem;
+}
+
+.discounted-price {
+    font-size: 1.1rem;
+}
+
+.price {
+    font-size: 1.1rem;
+}
+
+/* Add to Cart Button */
+.btn-primary {
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+/* Pagination Styling */
+.pagination .page-link {
+    color: #3498db;
+    border: 1px solid #dee2e6;
+    margin: 0 2px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.pagination .page-link:hover {
+    background-color: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+    border-color: #3498db;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    background-color: #f8f9fa;
+}
+
+/* Current Category Badge */
+.current-category-badge .badge {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    border-radius: 20px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .nav-pills .nav-link {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .item-image {
+        height: 180px;
+    }
+}
+
+@media (max-width: 576px) {
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .item-image {
+        height: 160px;
+    }
+    
+    .price-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .original-price {
+        margin-bottom: 2px;
+    }
+}

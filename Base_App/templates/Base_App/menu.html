@@ -7,102 +7,136 @@
 
 {% load static %}
 
-{% block main %}
-    <!-- Food Section (Menu Page) -->
-    <section class="food_section layout_padding-bottom">
-        <div class="container py-5">
+{% block extra_css %}
+    <!-- Book Table Page Specific CSS -->
+    <link href="{% static 'css/menu.css' %}" rel="stylesheet" />
+{% endblock extra_css %}
 
-            <!-- Page Heading -->
-            <div class="heading_container heading_center">
-                <h2>Our Menu</h2>
-                {% if current_category %}
-                    <p class="text-muted">Category: {{ current_category.Category_name }}</p>
-                {% endif %}
+{% block main %}
+    <!-- Menu Section -->
+    <section class="menu-section py-5 bg-light">
+        <div class="container">
+
+            <!-- Success / Error Messages -->
+            {% if messages %}
+                <div class="messages-container mb-4">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- Section Header -->
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="section-title display-5 fw-bold mb-3">Our Menu</h2>
+                    <p class="section-subtitle lead text-muted">Discover our delicious offerings</p>
+
+                    {% if current_category %}
+                        <div class="current-category-badge mt-3">
+                            <span class="badge bg-primary fs-6">Category: {{ current_category.Category_name }}</span>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
 
-            <!-- Category Filter Menu -->
-            <ul class="filters_menu">
-                <!-- "All" resets the filter -->
-                <li class="{% if not current_category %}active{% endif %}">
-                    <a href="{% url 'Menu' %}">All</a>
-                </li>
+            <!-- Category Filter Tabs (Server-side filtering) -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <ul class="nav nav-pills justify-content-center flex-wrap" id="categoryTabs" role="tablist">
+                        <!-- "All" category link -->
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link {% if not current_category %}active{% endif %}" href="{% url 'Menu' %}" role="tab">
+                                All
+                            </a>
+                        </li>
 
-                {% for category in categories %}
-                    <li class="{% if current_category and current_category.slug == category.slug %}active{% endif %}">
-                        <a href="{% url 'Menu' %}?category={{ category.slug }}">
-                            {{ category.Category_name }}
-                        </a>
-                    </li>
-                {% empty %}
-                    <li>No categories available</li>
-                {% endfor %}
-            </ul>
+                        <!-- Category links -->
+                        {% for category in categories %}
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link {% if current_category and current_category.slug == category.slug %}active{% endif %}" href="{% url 'Menu' %}?category={{ category.slug }}" role="tab">
+                                    {{ category.Category_name }}
+                                </a>
+                            </li>
+                        {% empty %}
+                            <li class="nav-item">
+                                <span class="nav-link disabled">No categories available</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
 
             <!-- Menu Items Grid -->
-            <div class="filters-content">
-                <div class="row grid">
+            <div class="menu-items-container">
+                <div class="row g-4">
                     {% for item in items %}
-                        <!-- Category slug used as CSS class for filtering -->
-                        <div class="col-sm-6 col-lg-4 all {{ item.Category.slug }}">
-                            <div class="box">
-                                <div>
-                                    <!-- Item Image -->
-                                    <div class="img-box position-relative">
-                                        {% if item.Image %}
-                                            <img src="{{ item.Image.url }}" alt="{{ item.Item_name }}">
-                                        {% else %}
-                                            <img src="{% static 'images/default_item.png' %}" alt="No image available">
-                                        {% endif %}
-                                        
-                                        <!-- Discount Badge (if applicable) -->
-                                        {% if item.has_discount %}
-                                            <span class="position-absolute top-0 end-0 badge bg-danger m-2">
-                                                Save {{ item.get_discount_percent }}%
-                                            </span>
-                                        {% endif %}
-                                    </div>
+                        <div class="col-md-6 col-lg-4 col-xl-3">
+                            <div class="menu-item card h-100 border-0 shadow-sm overflow-hidden">
+                                <!-- Item Image with Discount Badge -->
+                                <div class="item-image position-relative overflow-hidden">
+                                    {% if item.Image %}
+                                        <img src="{{ item.Image.url }}" class="card-img-top" alt="{{ item.Item_name }}">
+                                    {% else %}
+                                        <img src="{% static 'images/default_item.png' %}" class="card-img-top" alt="No image available">
+                                    {% endif %}
 
-                                    <!-- Item Details -->
-                                    <div class="detail-box">
-                                        <h5>{{ item.Item_name }}</h5>
+                                    <!-- Discount Badge (If applicable) -->
+                                    {% if item.has_discount %}
+                                        <span class="discount-badge position-absolute top-0 end-0 badge bg-danger m-2">
+                                            Save {{ item.get_discount_percent }}%
+                                        </span>
+                                    {% endif %}
+                                </div>
 
-                                        {% if item.description %}
-                                            <p class="item-description">{{ item.description|truncatewords:15 }}</p>
-                                        {% endif %}
+                                <!-- Item Details -->
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title fw-bold">{{ item.Item_name }}</h5>
 
-                                        <div class="options d-flex justify-content-between align-items-center">
-                                            <!-- Item Price with Discount Display -->
-                                            <div class="price-container">
-                                                {% if item.has_discount %}
-                                                    <!-- Show original and discounted price -->
-                                                    <span class="original-price text-muted" style="text-decoration: line-through;">
-                                                        ${{ item.Price }}
-                                                    </span>
-                                                    <span class="discounted-price text-danger font-weight-bold">
-                                                        ${{ item.discounted_price|floatformat:2 }}
-                                                    </span>
-                                                {% else %}
-                                                    <!-- Show regular price -->
-                                                    <span class="price">${{ item.Price }}</span>
-                                                {% endif %}
-                                            </div>
+                                    {% if item.description %}
+                                        <p class="card-text text-muted flex-grow-1">
+                                            {{ item.description|truncatewords:15 }}
+                                        </p>
+                                    {% endif %}
 
-                                            <!-- Add-to-cart button (form POST) -->
-                                            <form action="{% url 'add_to_cart' item.id %}" method="post" class="d-inline">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-sm btn-outline-light">
-                                                    <i class="fa fa-cart-plus"></i> Add
-                                                </button>
-                                            </form>
+                                    <div class="item-actions d-flex justify-content-between align-items-center mt-auto">
+                                        <!-- Price Display with Discount -->
+                                        <div class="price-container">
+                                            {% if item.has_discount %}
+                                                <!-- Show original and discounted price -->
+                                                <span class="original-price text-muted text-decoration-line-through me-2">
+                                                    ${{ item.Price }}
+                                                </span>
+                                                <span class="discounted-price fw-bold text-danger">
+                                                    ${{ item.discounted_price|floatformat:2 }}
+                                                </span>
+                                            {% else %}
+                                                <!-- Show regular price -->
+                                                <span class="price fw-bold text-primary">
+                                                    ${{ item.Price }}
+                                                </span>
+                                            {% endif %}
                                         </div>
+
+                                        <!-- Add-to-cart Button -->
+                                        <form action="{% url 'add_to_cart' item.id %}" method="post" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-cart-plus me-1"></i>
+                                                Add
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     {% empty %}
-                        <!-- Empty state message -->
-                        <div class="col-12 text-center py-4">
-                            <p class="text-muted">No menu items found for this category.</p>
+                        <!-- Empty State message -->
+                        <div class="col-12 text-center py-5">
+                            <p class="text-muted fs-5 mb-3">No menu items found for this category.</p>
                             <a href="{% url 'Menu' %}" class="btn btn-primary">View All Items</a>
                         </div>
                     {% endfor %}
@@ -111,58 +145,72 @@
 
             <!-- Pagination -->
             {% if paginate %}
-                <nav aria-label="Menu pagination">
-                    <ul class="pagination justify-content-center mt-4">
-
-                        <!-- Previous Page -->
+                <nav aria-label="Menu pagination" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        <!-- Previous Page Link -->
                         {% if items.has_previous %}
                             <li class="page-item">
                                 <a class="page-link" href="?page={{ items.previous_page_number }}{% if current_category %}&category={{ current_category.slug }}{% endif %}" aria-label="Previous">
-                                    &laquo;
+                                    <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
                         {% else %}
                             <li class="page-item disabled">
-                                <span class="page-link">&laquo;</span>
+                                <span class="page-link" aria-hidden="true">&laquo;</span>
                             </li>
                         {% endif %}
 
-                        <!-- Page Numbers -->
+                        <!-- Page Number Links -->
                         {% for num in items.paginator.page_range %}
                             {% if num >= items.number|add:-2 and num <= items.number|add:2 %}
                                 {% if items.number == num %}
-                                    <li class="page-item active">
+                                    <li class="page-item active" aria-current="page">
                                         <span class="page-link">{{ num }}</span>
                                     </li>
                                 {% else %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ num }}{% if current_category %}&category={{ current_category.slug }}{% endif %}">{{ num }}</a>
+                                        <a class="page-link" href="?page={{ num }}{% if current_category %}&category={{ current_category.slug }}{% endif %}">
+                                            {{ num }}
+                                        </a>
                                     </li>
                                 {% endif %}
                             {% endif %}
                         {% endfor %}
 
-                        <!-- Next Page -->
+                        <!-- Next Page Link -->
                         {% if items.has_next %}
                             <li class="page-item">
                                 <a class="page-link" href="?page={{ items.next_page_number }}{% if current_category %}&category={{ current_category.slug }}{% endif %}" aria-label="Next">
-                                    &raquo;
+                                    <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
                         {% else %}
                             <li class="page-item disabled">
-                                <span class="page-link">&raquo;</span>
+                                <span class="page-link" aria-hidden="true">&raquo;</span>
                             </li>
                         {% endif %}
                     </ul>
+
+                    <!-- Page Info -->
+                    <div class="text-center mt-2 text-muted">
+                        Page {{ items.number }} of {{ items.paginator.num_pages }}
+                    </div>
                 </nav>
             {% endif %}
 
-            <!-- Extra "View More" Button -->
-            <div class="btn-box mt-4 text-center">
-                <a href="#" class="btn btn-outline-primary">View More</a>
-            </div>
+            <!-- View Full Menu Button -->
+            {% if current_category %}
+                <div class="row mt-4">
+                    <div class="col-12 text-center">
+                        <a href="{% url 'Menu' %}" class="btn btn-outline-primary">View Full Menu</a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </section>
-    <!-- /End Food Section -->
 {% endblock main %}
+
+{% block extra_js %}
+    <!-- Book Table Page Specific JavaScript -->
+    <script src="{% static 'js/menu.js' %}"></script>
+{% endblock extra_js %}

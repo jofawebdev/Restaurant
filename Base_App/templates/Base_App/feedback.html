@@ -2,72 +2,222 @@
 
 {% load static %}
 
-{% block class %}class="sub_page"{% endblock class %}
+{% block body_class %}class="sub_page"{% endblock body_class %}
 
 {% block feedback_status %}active{% endblock feedback_status %}
 
-{% block main %}
-    <!-- Start Feedback Form -->
-    <section class="book_section layout_padding">
-        <div class="container">
-            <div class="heading_container">
-                <h2>
-                    Book A Table
-                </h2>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form_container">
-                        <form action="#" method="POST">
-                            {% csrf_token %}
-                            <div>
-                                <input type="text" class="form-control" name="user_name" required placeholder="Your Name" />
-                            </div>
-                            <div class="mb-3">
-                                <textarea class="form-control" id="exampleFormControlTextarea1" name="Description" rows="3" required placeholder="Describe your experience here"></textarea>
-                            </div>
-                            <div>
-                                <select class="form-control nice-select wide" required name="total_person">
-                                    <option value="" disabled selected>
-                                        Please Give Us Rating?
-                                    </option>
-                                    <option value="1">
-                                        1
-                                    </option>
-                                    <option value="2">
-                                        2
-                                    </option>
-                                    <option value="3">
-                                        3
-                                    </option>
-                                    <option value="4">
-                                        4
-                                    </option>
-                                    <option value="5">
-                                        5
-                                    </option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="formFileLg" class="form-label">Select Image</label>
-                                <input class="form-control form-control-lg" id="formFileLg" type="file">
-                            </div>
-                            <div class="btn_box">
-                                <button>
-                                    Submit
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+{% block extra_css %}
+    <!-- Feedback Page Specific CSS -->
+    <link href="{% static 'css/feedback.css' %}" rel="stylesheet" />
+{% endblock extra_css %}
 
-                <div class="col-md-6">
-                    <div class="map_container">
-                        <div id="googleMap"></div>
+{% block main %}
+    <!-- Start Feedback Section -->
+    <section class="feedback-section py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <!-- Page Header -->
+                    <div class="page-header text-center mb-5">
+                        <h1 class="display-4 fw-bold text-dark mb-3">Share Your Experience</h1>
+                        <p class="lead text-muted">We value your feedback to help us improve our service and dining experience</p>
+                        <div class="divider mx-auto bg-warning" style="height: 4px; width: 80px;"></div>
+                    </div>
+
+                    <!-- Success / Error Messages -->
+                    {% if messages %}
+                        <div class="messages-container mb-4">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Feedback Form Card -->
+                    <div class="card shadow-lg border-0 rounded-3 overflow-hidden">
+                        <div class="row g-0">
+                            <!-- Form Column -->
+                            <div class="col-lg-8">
+                                <div class="card-body p-4 p-md-5">
+                                    <h3 class="card-title fw-bold mb-4">Tell Us About Your Visit</h3>
+
+                                    <form method="POST" enctype="multipart/form-data" id="feedbackForm" novalidate>
+                                        {% csrf_token %}
+
+                                        <!-- Name Field -->
+                                        <div class="mb-4">
+                                            <label for="userName" class="form-label fw-semibold">Your Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control form-control-lg" id="userName" name="user_name" required placeholder="Enter your full name" value="{% if form.user_name.value %}{{ form.user_name.value }}{% endif %}">
+                                            <div class="invalid-feedback">Please provide your name.</div>
+                                        </div>
+
+                                        <!-- Email Field -->
+                                        <div class="mb-4">
+                                            <label for="userEmail" class="form-label fw-semibold">Email Address</label>
+                                            <input type="email" class="form-control form-control-lg" id="userEmail" name="user_email" placeholder="Enter your email" value="{% if form.user_email.value %}{{ form.user_email.value }}{% endif %}">
+                                            <div class="form-text">We'll only use this to respond to your feedback</div>
+                                            <div class="invalid-feedback">Please provide a valid email address.</div>
+                                        </div>
+
+                                        <!-- Feedback Description -->
+                                        <div class="mb-4">
+                                            <label for="feedbackDescription" class="form-label fw-semibold">Your Feedback <span class="text-danger">*</span></label>
+                                            <textarea class="form-control" id="feedbackDescription" name="Description" rows="5" required placeholder="Please describe your experience at our restaurant...">{% if form.Description.value %}{{ form.Description.value }}{% endif %}</textarea>
+                                            <div class="invalid-feedback">Please provide your feedback</div>
+                                        </div>
+
+                                        <!-- Rating Selection -->
+                                        <div class="mb-4">
+                                            <label for="ratingSelect" class="form-label fw-semibold ps-2">Rate Your Experience <span class="text-danger">*</span></label>
+                                            <select class="form-select form-select-lg" id="ratingSelect" name="rating" required>
+                                                <option value="" disabled selected>Select a rating (1-5 stars)</option>
+                                                <option value="1" {% if form.rating.value == "1" %}selected{% endif %}>★ - Poor</option>
+                                                <option value="2" {% if form.rating.value == "2" %}selected{% endif %}>★★ - Fair</option>
+                                                <option value="3" {% if form.rating.value == "3" %}selected{% endif %}>★★★ - Good</option>
+                                                <option value="4" {% if form.rating.value == "4" %}selected{% endif %}>★★★★ - Very Good</option>
+                                                <option value="5" {% if form.rating.value == "5" %}selected{% endif %}>★★★★★ - Excellent</option>
+                                            </select>
+                                            <div class="invalid-feedback">Please select a rating.</div>
+                                        </div>
+
+                                        <!-- Image Upload -->
+                                        <div class="mb-4">
+                                            <label for="feedbackImage" class="form-label fw-semibold">Upload an Image (Optional)</label>
+                                            <input class="form-control form-control-lg" id="feedbackImage" type="file" name="feedback_image" accept="image/*">
+                                            <div class="form-text">Share a photo of your meal or dining experience (Max 5MB)</div>
+                                            <div class="invalid-feedback">Please select a valid image file (JPG, PNG, GIF).</div>
+                                        </div>
+
+                                        <!-- Submit Button -->
+                                        <div class="d-grid mt-4">
+                                            <button type="submit" class="btn btn-warning btn-lg fw-bold py-3" id="submitButton">
+                                                <i class="fas fa-paper-plane me-2"></i>
+                                                Submit Feedback
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Info Column -->
+                            <div class="col-lg-4 bg-light d-flex align-items-center">
+                                <div class="p-4 p-md-5">
+                                    <h4 class="fw-bold mb-3">Why Your Feedback Matters</h4>
+                                    <p class="mb-4">We're committed to providing the best dining experience possible. Your honest feedback helps us:</p>
+
+                                    <ul class="list-unstyled">
+                                        <li class="mb-3">
+                                            <i class="fas fa-check-circle text-warning me-2"></i>
+                                            Improve our menu and service
+                                        </li>
+                                        <li class="mb-3">
+                                            <i class="fas fa-check-circle text-warning me-2"></i>
+                                            Train our staff effectively
+                                        </li>
+                                        <li class="mb-3">
+                                            <i class="fas fa-check-circle text-warning me-2"></i>
+                                            Maintain quality standards
+                                        </li>
+                                        <li class="mb-3">
+                                            <i class="fas fa-check-circle text-warning me-2"></i>
+                                            Create better experiences for all guests
+                                        </li>
+                                    </ul>
+
+                                    <div class="mt-4 p-3 bg-white rounded-3 border">
+                                        <h5 class="fw-semibold mb-2">Response Time</h5>
+                                        <p class="mb-0 small">We aim to respond to all feedback within 48 hours.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonials Section -->
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="text-center mb-4">
+                                <h3 class="fw-bold">What Our Customers Say</h3>
+                                <p class="text-muted">Read feedback from other diners</p>
+                            </div>
+
+                            <div class="row g-4">
+                                <!-- Testimonial 1 -->
+                                <div class="col-md-4">
+                                    <div class="card h-100 border-0 shadow-sm testimonial-card">
+                                        <div class="card-body text-center p-4">
+                                            <div class="mb-3">
+                                                <i class="fas fa-quote-left text-warning fa-2x"></i>
+                                            </div>
+                                            <p class="card-text mb-3">"The food was absolutely delicious! The service was exceptional and the ambiance was perfect for a date night."</p>
+                                            <div class="rating mb-2">
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                            </div>
+                                            <h6 class="card-title mb-1">Sarah Johnson</h6>
+                                            <small class="text-muted">Regular Customer</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Testimoial 2 -->
+                                <div class="col-md-4">
+                                    <div class="card h-100 border-0 shadow-sm testimonial-card">
+                                        <div class="card-body text-center p-4">
+                                            <div class="mb-3">
+                                                <i class="fas fa-quote-left text-warning fa-2x"></i>
+                                            </div>
+                                            <p class="card-text mb-3">"I celebrated my birthday here and the staff went above and beyond to make it special. Highly recommend!"</p>
+                                            <div class="rating mb-2">
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                            </div>
+                                            <h6 class="card-title mb-1">Michael Torres</h6>
+                                            <small class="text-muted">First-time Visitor</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Testimonial 3 -->
+                                <div class="col-md-4">
+                                    <div class="card h-100 border-0 shadow-sm testimonial-card">
+                                        <div class="card-body text-center p-4">
+                                            <div class="mb-3">
+                                                <i class="fas fa-quote-left text-warning fa-2x"></i>
+                                            </div>
+                                            <p class="card-text mb-3">"The flavors were incredible and the presentation was beautiful. Can't wait to come back and try more dishes!"</p>
+                                            <div class="rating mb-2">
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                            </div>
+                                            <h6 class="card-title mb-1">Emma Wilson</h6>
+                                            <small class="text-muted">Food Blogger</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- End Feedback Form -->
-{% endblock %}
+    <!-- /End Feedback Section -->
+{% endblock main %}
+
+{% block extra_js %}
+    <!-- Feedback Page Specific JavaScript -->
+    <script src="{% static 'js/feedback.js' %}"></script>
+{% endblock extra_js %}

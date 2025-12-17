@@ -1,12 +1,11 @@
 {% extends "Base_App/base.html" %}
 {% load static %}
 
-{% block class %}class="sub_page"{% endblock class %}
+{% block body_class %}class="sub_page"{% endblock body_class %}
 
 {% block main %}
     <section class="cart_section layout_padding-bottom py-5">
         <div class="container">
-
             <!-- Page Heading -->
             <div class="heading_container heading_center mb-4">
                 <h2>Your Cart</h2>
@@ -14,7 +13,7 @@
             </div>
 
             {% if cart_items %}
-                <!-- Cart Table -->
+                <!-- Cart Table - Responsive Design -->
                 <div class="table-responsive shadow-sm rounded">
                     <table class="table table-bordered align-middle text-center">
                         <thead class="table-dark">
@@ -39,7 +38,7 @@
                                         {% if cart_item.item.Image %}
                                             <img src="{{ cart_item.item.Image.url }}" alt="{{ cart_item.item.Item_name }}" width="60" class="rounded">
                                         {% else %}
-                                            <img src="{% static 'images/default_item.png' %}" alt="No image" width="60" class="rounded">
+                                            <img src="{% static 'images/default_item.png' %}" alt="No Image" width="60" class="rounded">
                                         {% endif %}
                                     </td>
 
@@ -54,15 +53,19 @@
                                         {% endif %}
                                     </td>
 
-                                    <!-- Quantity update form -->
+                                    <!-- Quantity update form - Fixed for all screen sizes -->
                                     <td>
-                                        <form action="{% url 'update_cart' cart_item.item.id %}" method="post" class="d-flex justify-content-center">
-                                            {% csrf_token %}
-                                            <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" class="form-control form-control-sm w-50 text-center">
-                                            <button type="submit" class="btn btn-sm btn-outline-primary ms-2">
-                                                Update
-                                            </button>
-                                        </form>
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <form action="{% url 'update_cart' cart_item.item.id %}" method="post" class="d-flex flex-column flex-md-row align-items-center gap-2">
+                                                {% csrf_token %}
+                                                <div class="input-group input-group-sm" style="max-width: 150px;">
+                                                    <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" class="form-control text-center">
+                                                </div>
+                                                <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                    Update
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
 
                                     <!-- Subtotal -->
@@ -95,41 +98,85 @@
                 </div>
 
                 <!-- Cart Summary -->
-                <div class="cart_summary mt-4 p-3 bg-light rounded shadow-sm">
-                    <h5 class="fw-bold">Cart Summary</h5>
-                    <p class="mb-1">Total Items: {{ cart_item_count }}</p>
+                <div class="cart_summary mt-4 p-4 bg-light rounded shadow-sm">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5 class="fw-bold mb-3">Cart Summary</h5>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p class="mb-2">Total Items:
+                                        <strong>{{ cart_item_count }}</strong>
+                                    </p>
+                                </div>
+                                <div class="col-sm-6">
+                                    {% if total_discount > 0 %}
+                                        <p class="mb-2 text-muted" style="text-decoration: line-through;">Original Total: ${{ original_total|floatformat:2 }}</p>
+                                        <p class="mb-2 text-success">Discount: -${{ total_discount|floatformat:2 }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="total-price mt-3">
+                                <h4 class="text-primary">Total Price:
+                                    <strong>${{ cart_total|floatformat:2 }}</strong>
+                                </h4>
+                            </div>
+                        </div>
 
-                    {% if total_discount > 0 %}
-                        <p class="mb-1 text-muted" style="text-decoration: line-through;">Original Total: ${{ Original_total|floatformat:2 }}</p>
+                        <div class="col-md-4 d-flex flex-column justify-content-between">
+                            <div class="action-buttons">
+                                <div class="d-grid gap-2">
+                                    <a href="{% url 'Menu' %}" class="btn btn-outline-secondary">
+                                        <i class="fa fa-arrow-left me-2"></i> Continue Shopping
+                                    </a>
 
-                        <p class="mb-1 text-success">Discount: -${{ total_discount|floatformat:2 }}</p>
-                    {% endif %}
-
-                    <p class="mb-3">Total Price: <strong>${{ cart_total|floatformat:2 }}</strong></p>
-
-                    <div class="d-flex justify-content-between">
-                        <a href="{% url 'Menu' %}" class="btn btn-outline-secondary">
-                            <i class="fa fa-arrow-left"></i> Continue Shopping
-                        </a>
-
-                        {% if user.is_authenticated %}
-                            <!-- Display checkout button -->
-                            <a href="{% url 'checkout' %}" class="btn btn-success {% if not cart_items %}disabled{% endif %}">
-                                Checkout <i class="fa fa-credit-card"></i>
-                            </a>
-                        {% else %}
-                            <!-- Display login and register options for unauthenticated users -->
-                            <a href="{% url 'login' %}" class="btn btn-sm btn-outline-primary mr-2">
-                                <i class="fa fa-sign-in mr-1" aria-hidden="true"></i>Login
-                            </a>
-                        {% endif %}
+                                    {% if user.is_authenticated %}
+                                        <!-- Display Checkout button -->
+                                        <a href="{% url 'checkout' %}" class="btn btn-success {% if not cart_items %}disabled{% endif %}">
+                                            Checkout <i class="fa fa-credit-card ms-2"></i>
+                                        </a>
+                                    {% else %}
+                                        <!-- Display login option for unauthenticated users -->
+                                        <div class="d-grid gap-2">
+                                            <a href="{% url 'login' %}" class="btn btn-primary">
+                                                <i class="fa fa-sign-in me-2" aria-hidden="true"></i>Login to Checkout
+                                            </a>
+                                            <small class="text-muted text-center">or <a href="{% url 'register' %}">create an account</a></small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Promotional Banner -->
+                <div class="promo-banner mt-4 p-3 bg-warning text-dark rounded text-center">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5 class="mb-1">
+                                <i class="fas fa-shipping-fast me-2"></i>
+                                Free Delivery on Orders Over $25!
+                            </h5>
+                            <p class="mb-0 small">Order now and get your food delivered fresh and fast</p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <span class="badge bg-dark fs-6 px-3 py-2">
+                                <i class="fas fa-clock me-1"></i>30 min delivery
+                            </span>
+                        </div>
+                    </div>
+                </div>
             {% else %}
                 <!-- Empty cart message -->
-                <div class="alert alert-info text-center">
-                    Your cart is empty. <a href="{% url 'Menu' %}">Browse our menu</a> to add items.
+                <div class="empty-cart text-center py-5">
+                    <div class="empty-icon mb-4">
+                        <i class="fas fa-shopping-cart fa-4x text-muted"></i>
+                    </div>
+                    <h3 class="text-muted mb-3">Your cart is empty</h3>
+                    <p class="text-muted mb-4">Looks like you haven't added any items to your cart yet.</p>
+                    <a href="{% url 'Menu' %}" class="btn btn-primary btn-lg px-5">
+                        <i class="fas fa-utensils me-2"></i>Browse Our Menu
+                    </a>
                 </div>
             {% endif %}
         </div>

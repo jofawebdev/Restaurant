@@ -94,7 +94,7 @@
                                                 <li>
                                                     <form method="post" action="{% url 'logout' %}" class="d-inline">
                                                         {% csrf_token %}
-                                                        <button type="submit" class="dropdown-item btn btn-link text-decoration-none">
+                                                        <button type="submit" class="dropdown-item btn btn-link text-decoration-none text-white ps-4">
                                                             <i class="fa fa-sign-out me-2" aria-hidden="true"></i>Logout
                                                         </button>
                                                     </form>
@@ -103,7 +103,7 @@
                                         </div>
 
                                         <li class="nav-item ms-2">
-                                            <a class="nav-link" href="{% url 'order_history' %}">
+                                            <a class="nav-link text-warning" href="{% url 'order_history' %}">
                                                 <i class="fa fa-history"></i> Order History
                                             </a>
                                         </li>
@@ -131,7 +131,7 @@
                                     <li class="nav-item ms-2">
                                         <span class="nav-link">
                                             {% if cart_total_price > 0 %}
-                                                <small class="text-white">Total: ${{ cart_total_price }}</small>
+                                                <small class="text-warning">Total: ${{ cart_total_price }}</small>
                                             {% else %}
                                                 <small class="text-white-50">Cart empty</small>
                                             {% endif %}
@@ -181,7 +181,7 @@
                         <div class="footer_detail">
                             <a href="#" class="footer-logo">Feane</a>
                             <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                Welcome to our quick-service restaurant, where delicious meets convenient!
                             </p>
                             <div class="footer_social">
                                 <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>

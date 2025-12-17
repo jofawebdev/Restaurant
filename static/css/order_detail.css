@@ -1,0 +1,301 @@
+/* Order Detail Page Specific Styles */
+
+/* Table Container Styling with Horizontal Scroll */
+.order-table-container {
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Force horizontal scrolling on mobile */
+@media (max-width: 768px) {
+    .order-table-container {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .order-detail-table {
+        min-width: 600px; /* Minimum width to ensure horizontal scroll */
+    }
+}
+
+/* Order Detail Table Styling */
+.order-detail-table {
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+}
+
+/* Ensure table borders are always clearly visible */
+.order-detail-table.table-bordered {
+    border: 1px solid #dee2e6 !important;
+}
+
+.order-detail-table.table-bordered th,
+.order-detail-table.table-bordered td {
+    border: 1px solid #dee2e6 !important;
+}
+
+/* Enhance border visibility on table headers */
+.order-detail-table .table-light th {
+    background-color: #f8f9fa;
+    border-color: #dee2e6 !important;
+    font-weight: 600;
+}
+
+/* Ensure border consistency on hover */
+.order-detail-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Card header styling for better visibility */
+.card-header.bg-primary {
+    background-color: #0d6efd !important;
+}
+
+/* Text contrast utilities */
+.text-white-80 {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Enhanced shadow for main card */
+.shadow-lg {
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+/* Consistent spacing */
+.card-body > .row {
+    margin-bottom: 1.5rem;
+}
+
+/* Mobile-first responsive adjustments */
+@media (max-width: 768px) {
+    /* Container padding for mobile */
+    .container-fluid.px-3 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    
+    /* Card padding adjustments for mobile */
+    .card-body.p-3 {
+        padding: 1rem !important;
+    }
+    
+    .card-header.px-3 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    
+    /* Adjust table font sizes for mobile */
+    .order-detail-table {
+        font-size: 0.875rem;
+    }
+    
+    .order-detail-table th,
+    .order-detail-table td {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    /* Make badges smaller on mobile */
+    .badge.fs-6 {
+        font-size: 0.75rem !important;
+    }
+    
+    /* Adjust table header alignment for mobile */
+    .order-detail-table thead th {
+        white-space: nowrap;
+        font-size: 0.8rem;
+    }
+    
+    /* Ensure table cells don't break words awkwardly */
+    .order-detail-table td {
+        word-wrap: break-word;
+        min-width: 80px;
+    }
+    
+    /* Stack action buttons vertically on mobile */
+    .d-flex.flex-column.flex-sm-row .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Reduce section padding on mobile */
+    .layout_padding.py-4 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+    
+    /* Adjust card margins for mobile */
+    .card.mx-2 {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    
+    /* Reduce heading sizes on mobile */
+    .h2 {
+        font-size: 1.5rem;
+    }
+    
+    .h4 {
+        font-size: 1.25rem;
+    }
+}
+
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+    /* Further reduce table font size */
+    .order-detail-table {
+        font-size: 0.8rem;
+    }
+    
+    /* Adjust table cell padding */
+    .order-detail-table th,
+    .order-detail-table td {
+        padding: 0.375rem 0.5rem;
+    }
+    
+    /* Ensure proper container padding on very small screens */
+    .container-fluid.px-3 {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+    
+    /* Reduce card body padding further */
+    .card-body.p-3 {
+        padding: 0.75rem !important;
+    }
+    
+    /* Smaller badges on very small screens */
+    .badge.fs-6 {
+        font-size: 0.7rem !important;
+        padding: 0.25rem 0.5rem !important;
+    }
+    
+    /* Adjust button sizes */
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    /* Adjust table font size for tablets */
+    .order-detail-table {
+        font-size: 0.9rem;
+    }
+    
+    /* Ensure proper spacing in cards */
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    /* Container padding for tablets */
+    .container-fluid.px-4 {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    /* Maintain standard sizing for desktop */
+    .order-detail-table {
+        font-size: 1rem;
+    }
+    
+    /* Container padding for desktop */
+    .container-fluid.px-4 {
+        padding-left: 3rem !important;
+        padding-right: 3rem !important;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .container-fluid.px-4 {
+        padding-left: 4rem !important;
+        padding-right: 4rem !important;
+    }
+}
+
+/* Print styles for order details */
+@media print {
+    .btn {
+        display: none !important;
+    }
+    
+    .breadcrumb {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+    }
+    
+    .order-detail-table {
+        border: 1px solid #000 !important;
+    }
+    
+    .order-detail-table th,
+    .order-detail-table td {
+        border: 1px solid #000 !important;
+    }
+    
+    /* Ensure table fits on printed page */
+    .order-table-container {
+        overflow-x: visible !important;
+    }
+    
+    .order-detail-table {
+        min-width: auto !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .order-detail-table.table-bordered {
+        border: 2px solid #000 !important;
+    }
+    
+    .order-detail-table.table-bordered th,
+    .order-detail-table.table-bordered td {
+        border: 2px solid #000 !important;
+    }
+    
+    .table-light th {
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .table-hover tbody tr {
+        transition: none;
+    }
+}
+
+/* Scrollbar styling for webkit browsers */
+.order-table-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.order-table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.order-table-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.order-table-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}

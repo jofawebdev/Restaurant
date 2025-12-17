@@ -1,69 +1,275 @@
 {% extends "Base_App/base.html" %}
 
-{% block class %}class="sub_page"{% endblock class %}
+{% load static %}
+
+{% block body_class %}class="sub_page"{% endblock body_class %}
 
 {% block table_status %}active{% endblock table_status %}
 
+{% block extra_css %}
+    <!-- Book Table Page Specific CSS -->
+    <link href="{% static 'css/book_table.css' %}" rel="stylesheet" />
+{% endblock extra_css %}
+
 {% block main %}
-    <!-- Book Section -->
-    <section class="book_section layout_padding">
+    <!-- Start Book Table Section-->
+    <section class="book-table-section py-5">
         <div class="container">
-            <div class="heading_container">
-                <h2>
-                    Book A Table
-                </h2>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form_container">
-                        <form action="{% url 'Book_Table' %}" method="POST">
-                            {% csrf_token %}
-                            <div>
-                                <input type="text" class="form-control" name="user_name" required placeholder="Your Name" />
-                            </div>
-                            <div>
-                                <input type="text" class="form-control" name="phone_number" required placeholder="Phone Number" />
-                            </div>
-                            <div>
-                                <input type="email" class="form-control" name="user_email" placeholder="Your Email" />
-                            </div>
-                            <div>
-                                <select class="form-control nice-select wide" required name="total_person">
-                                    <option value="" disabled selected>
-                                        How many persons?
-                                    </option>
-                                    <option value="2">
-                                        2
-                                    </option>
-                                    <option value="3">
-                                        3
-                                    </option>
-                                    <option value="4">
-                                        4
-                                    </option>
-                                    <option value="5">
-                                        5
-                                    </option>
-                                </select>
-                            </div>
-                            <div>
-                                <input type="date" required name="booking_date" class="form-control">
-                            </div>
-                            <div class="btn_box">
-                                <button>
-                                    Book Now
-                                </button>
-                            </div>
-                        </form>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <!-- Page Header -->
+                    <div class="page-header text-center mb-5">
+                        <h1 class="display-4 fw-bold text-dark mb-3">Reserve Your Table</h1>
+                        <p class="lead text-muted">Experience exceptional dining in our elegant restaurant. Book your table now and secure your perfect dining experience.</p>
+                        <div class="divider mx-auto bg-warning" style="height: 4px; width: 80px;"></div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="map_container">
-                        <div id="googleMap"></div>
+
+                    <!-- Success / Error Messages -->
+                    {% if messages %}
+                        <div class="messages-container mb-4">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="row g-5">
+                        <!-- Booking Form Column -->
+                        <div class="col-lg-6">
+                            <div class="booking-card card shadow-lg border-0 rounded-3 h-100">
+                                <div class="card-header bg-dark text-white py-4 rounded-top-3">
+                                    <h3 class="card-title mb-0 text-center">
+                                        <i class="fas fa-calendar-alt me-2"></i>
+                                        Make a Reservation
+                                    </h3>
+                                </div>
+                                <div class="card-body p-4 p-md-5">
+                                    <form action="{% url 'Book_Table' %}" method="POST" id="bookingForm" novalidate>
+                                        {% csrf_token %}
+
+                                        <!-- Name Field -->
+                                        <div class="mb-4">
+                                            <label for="userName" class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-end-0">
+                                                    <i class="fas fa-user text-muted"></i>
+                                                </span>
+                                                <input type="text" class="form-control form-control-lg border-start-0" id="userName" name="user_name" required placeholder="Enter your full name" value="{% if form.user_name.value %}{{ form.user_name.value }}{% endif %}">
+                                            </div>
+                                            <div class="invalid-feedback">Please provide your name.</div>
+                                        </div>
+
+                                        <!-- Phone Number Field -->
+                                        <div class="mb-4">
+                                            <label for="phoneNumber" class="form-label fw-semibold">Phone Number <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-end-0">
+                                                    <i class="fas fa-phone text-muted"></i>
+                                                </span>
+                                                <input type="tel" class="form-control form-control-lg border-start-0" id="phoneNumber" name="phone_number" required placeholder="Enter your phone number" value="{% if form.phone_number.value %}{{ form.phone_number.value }}{% endif %}">
+                                            </div>
+                                            <div class="invalid-feedback">Please provide a valid phone number.</div>
+                                        </div>
+
+                                        <!-- Email Field -->
+                                        <div class="mb-4">
+                                            <label for="userEmail" class="form-label fw-semibold">Email Address</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-end-0">
+                                                    <i class="fas fa-envelope text-muted"></i>
+                                                </span>
+                                                <input type="email" class="form-control form-control-lg border-start-0" id="userEmail" name="user_email" placeholder="Enter your email (Optional)" value="{% if form.user_email.value %}{{ form.user_email.value }}{% endif %}">
+                                            </div>
+                                            <div class="form-text">We'll send booking confirmation to this email</div>
+                                            <div class="invalid-feedback">Please provide a valid email address.</div>
+                                        </div>
+
+                                        <!-- Number of Persons -->
+                                        <div class="mb-4">
+                                            <label for="totalPerson" class="form-label fw-semibold">Number of Guests <span class="text-danger">*</span></label>
+                                            <select class="form-select form-select-lg" id="totalPerson" name="total_person" required>
+                                                <option value="" disabled selected>How many persons?</option>
+                                                <option value="1" {% if form.total_person.value == "1" %}selected{% endif %}>1 Person</option>
+                                                <option value="2" {% if form.total_person.value == "2" %}selected{% endif %}>2 People</option>
+                                                <option value="3" {% if form.total_person.value == "3" %}selected{% endif %}>3 People</option>
+                                                <option value="4" {% if form.total_person.value == "4" %}selected{% endif %}>4 People</option>
+                                                <option value="5" {% if form.total_person.value == "5" %}selected{% endif %}>5 People</option>
+                                                <option value="6" {% if form.total_person.value == "6" %}selected{% endif %}>6 People</option>
+                                                <option value="7" {% if form.total_person.value == "7" %}selected{% endif %}>7 People</option>
+                                                <option value="8" {% if form.total_person.value == "8" %}selected{% endif %}>8+ People (Please call)</option>
+                                            </select>
+                                            <div class="invalid-feedback">Please select number of guests.</div>
+                                        </div>
+
+                                        <!-- Date Selection -->
+                                        <div class="mb-4">
+                                            <label for="bookingDate" class="form-label fw-semibold">Booking Date <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light border-end-0">
+                                                    <i class="fas fa-calendar-day text-muted"></i>
+                                                </span>
+                                                <input type="date" class="form-control form-control-lg border-start-0" id="bookingDate" name="booking_date" required value="{% if form.booking_date.value %}{{ form.booking_date.value }}{% endif %}">
+                                            </div>
+                                            <div class="invalid-feedback">Please select a booking date.</div>
+                                        </div>
+
+                                        <!-- Time Selection -->
+                                        <div class="mb-4">
+                                            <label for="bookingTime" class="form-label fw-semibold">Preferred Time</label>
+                                            <select class="form-select form-select-lg" id="bookingTime" name="booking_time">
+                                                <option value="" selected>Select Preferred time</option>
+                                                <option value="12:00"{% if form.booking_time.value == "12:00" %}selected{% endif %}>12:00 PM</option>
+                                                <option value="12:30"{% if form.booking_time.value == "12:30" %}selected{% endif %}>12:30 PM</option>
+                                                <option value="13:00"{% if form.booking_time.value == "13:00" %}selected{% endif %}>1:00 PM</option>
+                                                <option value="13:30"{% if form.booking_time.value == "13:30" %}selected{% endif %}>1:30 PM</option>
+                                                <option value="14:00"{% if form.booking_time.value == "14:00" %}selected{% endif %}>2:00 PM</option>
+                                                <option value="18:00"{% if form.booking_time.value == "18:00" %}selected{% endif %}>6:00 PM</option>
+                                                <option value="18:30"{% if form.booking_time.value == "18:30" %}selected{% endif %}>6:30 PM</option>
+                                                <option value="19:00"{% if form.booking_time.value == "19:00" %}selected{% endif %}>7:00 PM</option>
+                                                <option value="19:30"{% if form.booking_time.value == "19:30" %}selected{% endif %}>7:30 PM</option>
+                                                <option value="20:00"{% if form.booking_time.value == "20:00" %}selected{% endif %}>8:00 PM</option>
+                                                <option value="20:30"{% if form.booking_time.value == "20:30" %}selected{% endif %}>8:30 PM</option>
+                                            </select>
+                                            <div class="form-text">Lunch: 12:00 PM - 2:30 PM | Dinner: 6:00 PM - 9:00 PM</div>
+                                        </div>
+
+                                        <!-- Special Requests -->
+                                        <div class="mb-4">
+                                            <label for="specialRequests" class="form-label fw-semibold">Special Requests</label>
+                                            <textarea class="form-control" id="specialRequests" name="special_requests" rows="3" placeholder="Any special requirements or celebrations...">{% if form.special_requests.value %}{{ form.special_requests.value }}{% endif %}</textarea>
+                                            <div class="form-text">Birthdays, anniversaries, dietary restrictions, etc.</div>
+                                        </div>
+
+                                        <!-- Submit Button -->
+                                        <div class="d-grid mt-4">
+                                            <button type="submit" class="btn btn-warning btn-lg fw-bold py-3" id="submitButton">
+                                                <i class="fas fa-calendar-check me-2"></i>
+                                                Confirm Reservation
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Map & Info Column -->
+                        <div class="col-lg-6">
+                            <!-- Restaurant Info Card -->
+                            <div class="info-card card border-0 shadow-sm mb-4">
+                                <div class="card-body p-4">
+                                    <h4 class="card-title fw-bold mb-3">
+                                        <i class="fas fa-info-circle text-warning me-2"></i>
+                                        Restaurant Information
+                                    </h4>
+
+                                    <div class="row g-3">
+                                        <div class="col-sm-6">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper bg-warning rounded-circle p-3 me-3">
+                                                    <i class="fas fa-clock text-white"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="fw-bold mb-1">Opening Hours</h6>
+                                                    <p class="mb-0 small">Mon - Sun: 10:00 AM - 10:00 PM</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper bg-warning rounded-circle p-3 me-3">
+                                                    <i class="fas fa-users text-white"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="fw-bold mb-1">Capacity</h6>
+                                                    <p class="mb-0 small">Up to 8 people per table</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper bg-warning rounded-circle p-3 me-3">
+                                                    <i class="fas fa-utensils text-white"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="fw-bold mb-1">Cuisine</h6>
+                                                    <p class="mb-0 small">Fine Dining & International</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="d-flex align-items-center">
+                                                <div class="icon-wrapper bg-warning rounded-circle p-3 me-3">
+                                                    <i class="fas fa-parking text-white"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="fw-bold mb-1">Parking</h6>
+                                                    <p class="mb-0 small">Complimentary Valet</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4 p-3 bg-light rounded-3">
+                                        <h6 class="fw-semibold mb-2">Booking Policy</h6>
+                                        <ul class="small mb-0 ps-3">
+                                            <li>Reservations held for 15 minutes past booking time</li>
+                                            <li>24-hour cancellation notice required</li>
+                                            <li>Large groups (8+) please call in advance</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Map Container -->
+                            <div class="map-card card border-0 shadow-sm">
+                                <div class="card-header bg-dark text-white py-3">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-map-marker-alt me-2"></i>
+                                        Find Us
+                                    </h5>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="map-container" id="googleMap">
+                                        <!-- Google Maps will be loaded here -->
+                                        <div class="map-placeholder d-flex align-items-center justify-content-center bg-light" style="height: 300px;">
+                                            <div class="text-center">
+                                                <i class="fas fa-map-marked-alt fa-3x text-muted mb-3"></i>
+                                                <p class="text-muted mb-0">Loading map...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Contact Info -->
+                            <div class="contact-card card border-0 shadow-sm mt-4">
+                                <div class="card-body p-4 text-center">
+                                    <h5 class="fw-bold mb-3">Need Immediate Assistance?</h5>
+                                    <p class="text-muted mb-3">Call us directly for last-minute reservations or special arrangements</p>
+                                    <a href="tel:+254798765432" class="btn btn-outline-dark btn-lg w-100">
+                                        <i class="fas fa-phone me-2"></i>+254 789 876 543
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- End Book Section -->
+    <!-- /End Book Table Section -->
 {% endblock main %}
+
+{% block extra_js %}
+    <!-- Book Table Page Specific JavaScript -->
+    <script src="{% static 'js/book_table.js' %}"></script>
+
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=initMap" async defer></script>
+{% endblock extra_js %}
